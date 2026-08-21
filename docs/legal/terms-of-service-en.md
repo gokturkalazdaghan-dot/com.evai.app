@@ -1,3 +1,7 @@
+---
+title: Terms of Service
+---
+
 # EVA AI — Terms of Service
 
 **Last updated:** 21 August 2026

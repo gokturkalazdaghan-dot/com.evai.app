@@ -1,0 +1,25 @@
+# docs/_config.yml
+#
+# GitHub Pages yapilandirmasi. Site KAYNAGI /docs klasoru; depo kokunu
+# kaynak yapmak Jekyll'in backend kodunu ve _archive'i islemesi demekti.
+#
+# Adres bicimi:
+#   https://<kullanici>.github.io/com.evai.app/legal/privacy-policy-tr
+
+title: EVA AI
+description: Elektrikli arac sarj asistani — yasal belgeler
+theme: jekyll-theme-minimal
+
+# YALNIZCA yasal belgeler yayinlanir.
+#
+# Mimari belgeler siteye DAHIL EDILMEZ: uc adlarini, kota anahtarlarini
+# ve panel belirteci akisini anlatiyorlar. Guvenlik gizlilige dayanmiyor
+# (istekler imzali, haklar sunucuda dogrulanir) ama bunlari bir web
+# sitesi olarak sunmanin da kimseye faydasi yok.
+exclude:
+  - AGGREGATOR-ROADMAP.md
+  - PAYWALL-ARCHITECTURE.md
+  - SUBSCRIPTION-SETUP.md
+  - TELEMETRY-ARCHITECTURE.md
+  - legal/README.md
+  - legal/build-pdf.py

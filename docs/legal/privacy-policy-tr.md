@@ -1,3 +1,7 @@
+---
+title: Gizlilik Politikası
+---
+
 # EVA AI — Gizlilik Politikası
 
 **Son güncelleme:** 21 Ağustos 2026

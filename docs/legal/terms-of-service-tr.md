@@ -1,3 +1,7 @@
+---
+title: Kullanım Şartları
+---
+
 # EVA AI — Kullanım Şartları
 
 **Son güncelleme:** 21 Ağustos 2026

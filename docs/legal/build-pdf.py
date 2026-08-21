@@ -222,8 +222,27 @@ def footer(canvas, doc):
     canvas.restoreState()
 
 
+def strip_front_matter(text):
+    """
+    Jekyll front matter'ini atar.
+
+    GitHub Pages, front matter'i OLMAYAN .md dosyalarini HTML'e cevirmez
+    -- ham metin olarak servis eder. Bu yuzden belgelerin basinda uc
+    tireyle ayrilmis bir baslik blogu var. PDF'te o blok ham metin
+    olarak basilmamali.
+    """
+    if not text.startswith('---'):
+        return text
+
+    marker = '\n---'
+    end = text.find(marker, 3)
+    if end == -1:
+        return text
+    return text[end + len(marker):].lstrip('\n')
+
+
 def build(md_path, pdf_path, styles):
-    text = io.open(md_path, encoding='utf-8').read()
+    text = strip_front_matter(io.open(md_path, encoding='utf-8').read())
     doc = SimpleDocTemplate(
         pdf_path, pagesize=A4,
         leftMargin=20 * mm, rightMargin=20 * mm,
@@ -240,7 +259,11 @@ def main():
     styles = build_styles()
     print('font:', font)
 
-    sources = sorted(f for f in os.listdir(HERE) if f.endswith('.md'))
+    # README ic notlardir; PDF'i uretilmez.
+    sources = sorted(
+        f for f in os.listdir(HERE)
+        if f.endswith('.md') and f.lower() != 'readme.md'
+    )
     if not sources:
         sys.exit('docs/legal altinda .md dosyasi yok.')
 

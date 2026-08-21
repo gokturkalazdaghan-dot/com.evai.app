@@ -1,3 +1,7 @@
+---
+title: Privacy Policy
+---
+
 # EVA AI — Privacy Policy
 
 **Last updated:** 21 August 2026
