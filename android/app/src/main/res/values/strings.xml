@@ -49,6 +49,7 @@
     <!-- Panel / asistan metinleri -->
     <string name="dashboard_title">Find Chargers</string>
     <string name="dashboard_near">Near %1$s</string>
+    <string name="dashboard_location_stale">Last known location</string>
     <string name="dashboard_filter">Filter</string>
     <string name="battery_health">Battery Health</string>
     <string name="battery_health_excellent">Excellent</string>
@@ -155,4 +156,17 @@
     <string name="legal_terms_of_service">Terms of Service</string>
     <string name="legal_link_unavailable">This link isn\'t available yet.</string>
     <string name="legal_link_no_browser">No browser found on this device.</string>
+    <string name="back">Back</string>
+    <string name="cancel">Cancel</string>
+    <string name="retry">Try again</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_delete_data_title">Delete my data</string>
+    <string name="settings_delete_data_body">Removes your vehicle profile, charge history, saved location and cached prices from this phone and from our servers. This cannot be undone.</string>
+    <string name="settings_delete_data_action">Delete my data</string>
+    <string name="settings_delete_data_progress">Deleting…</string>
+    <string name="settings_delete_data_done">Your data has been deleted.</string>
+    <string name="settings_delete_data_subscription_kept">Your subscription record was kept: accounting law requires us to retain proof of purchase, and deleting it would cut off access you have paid for.</string>
+    <string name="settings_delete_data_error">Nothing was deleted: %1$s</string>
+    <string name="settings_delete_confirm_title">Delete everything?</string>
+    <string name="settings_delete_confirm_body">Your vehicle profile, charge history, saved location and cached prices will be permanently deleted from this phone and from our servers. This cannot be undone.</string>
 </resources>

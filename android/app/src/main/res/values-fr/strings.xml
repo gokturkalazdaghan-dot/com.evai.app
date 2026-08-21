@@ -49,6 +49,7 @@
     <!-- Panel / asistan metinleri -->
     <string name="dashboard_title">Trouver des bornes</string>
     <string name="dashboard_near">Près de %1$s</string>
+    <string name="dashboard_location_stale">Dernière position connue</string>
     <string name="dashboard_filter">Filtrer</string>
     <string name="battery_health">État de la batterie</string>
     <string name="battery_health_excellent">Excellent</string>
@@ -155,4 +156,17 @@
     <string name="legal_terms_of_service">Conditions d\'utilisation</string>
     <string name="legal_link_unavailable">Ce lien n\'est pas encore disponible.</string>
     <string name="legal_link_no_browser">Aucun navigateur trouvé sur cet appareil.</string>
+    <string name="back">Retour</string>
+    <string name="cancel">Annuler</string>
+    <string name="retry">Réessayer</string>
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_delete_data_title">Supprimer mes données</string>
+    <string name="settings_delete_data_body">Supprime votre profil de véhicule, l\'historique de charge, la position enregistrée et les prix en cache de ce téléphone et de nos serveurs. Cette action est irréversible.</string>
+    <string name="settings_delete_data_action">Supprimer mes données</string>
+    <string name="settings_delete_data_progress">Suppression…</string>
+    <string name="settings_delete_data_done">Vos données ont été supprimées.</string>
+    <string name="settings_delete_data_subscription_kept">Votre enregistrement d\'abonnement a été conservé : la réglementation comptable impose de garder la preuve d\'achat, et le supprimer couperait l\'accès que vous avez payé.</string>
+    <string name="settings_delete_data_error">Rien n\'a été supprimé : %1$s</string>
+    <string name="settings_delete_confirm_title">Tout supprimer ?</string>
+    <string name="settings_delete_confirm_body">Votre profil de véhicule, l\'historique de charge, la position enregistrée et les prix en cache seront définitivement supprimés de ce téléphone et de nos serveurs. Cette action est irréversible.</string>
 </resources>

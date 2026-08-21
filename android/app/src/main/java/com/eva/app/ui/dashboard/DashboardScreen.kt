@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material.icons.filled.EvStation
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.SearchOff
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -98,8 +99,11 @@ fun DashboardScreen(
     vehicleMonitorViewModel: VehicleMonitorViewModel = hiltViewModel(),
     currentLat: Double,
     currentLon: Double,
-    locationLabel: String = "San Francisco, CA",
+    locationLabel: String,
+    /** Konum diskten okundu / tazelenemedi mi? Kullaniciya soylenmeli. */
+    isLocationStale: Boolean,
     onStationSelected: (StationDto) -> Unit = {},
+    onSettingsClick: () -> Unit = {},
 ) {
     val uiState by dashboardViewModel.uiState.collectAsState()
     val liveTelemetry by vehicleMonitorViewModel.telemetry.collectAsState()
@@ -153,7 +157,9 @@ fun DashboardScreen(
         ) {
             DashboardHeader(
                 locationLabel = locationLabel,
+                isLocationStale = isLocationStale,
                 onFilterClick = { showFilters = true },
+                onSettingsClick = onSettingsClick,
             )
 
             // Cevrimdisiyken fiyatlar YINE gosterilir; banner bunlarin
@@ -256,7 +262,9 @@ fun DashboardScreen(
 @Composable
 private fun DashboardHeader(
     locationLabel: String,
+    isLocationStale: Boolean,
     onFilterClick: () -> Unit,
+    onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -281,6 +289,21 @@ private fun DashboardHeader(
                     tint = MaterialTheme.colorScheme.primary,
                 )
             }
+
+            // ESKI KONUMU ESKI DIYE ISARETLE
+            // ------------------------------
+            // Cihaz taze bir fix uretemediginde (kapali alan, GPS
+            // sogumasi, ROM kisitlamasi) son bilinen konum gosterilmeye
+            // devam eder -- bos ekran daha kotu olurdu. Ama bunu SESSIZCE
+            // yapmak, kullaniciya bulunmadigi bir yerin istasyonlarini
+            // guncelmis gibi sunmak demek. Fiyat uydurmakla ayni kategori.
+            if (isLocationStale) {
+                Text(
+                    stringResource(R.string.dashboard_location_stale),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
         IconButton(
             onClick = onFilterClick,
@@ -289,6 +312,15 @@ private fun DashboardHeader(
                 .background(MaterialTheme.colorScheme.surfaceContainerHigh, CircleShape),
         ) {
             Icon(Icons.Filled.Tune, contentDescription = stringResource(R.string.dashboard_filter))
+        }
+        IconButton(
+            onClick = onSettingsClick,
+            modifier = Modifier
+                .padding(start = 6.dp)
+                .size(40.dp)
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh, CircleShape),
+        ) {
+            Icon(Icons.Filled.Settings, contentDescription = stringResource(R.string.settings_title))
         }
     }
 }

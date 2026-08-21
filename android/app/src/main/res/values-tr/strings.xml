@@ -48,6 +48,7 @@
     <!-- Panel / asistan metinleri -->
     <string name="dashboard_title">Şarj İstasyonu Bul</string>
     <string name="dashboard_near">%1$s yakınında</string>
+    <string name="dashboard_location_stale">Son bilinen konum</string>
     <string name="dashboard_filter">Filtrele</string>
     <string name="battery_health">Batarya Sağlığı</string>
     <string name="battery_health_excellent">Mükemmel</string>
@@ -154,4 +155,17 @@
     <string name="legal_terms_of_service">Kullanım Şartları</string>
     <string name="legal_link_unavailable">Bu bağlantı henüz kullanılamıyor.</string>
     <string name="legal_link_no_browser">Bu cihazda tarayıcı bulunamadı.</string>
+    <string name="back">Geri</string>
+    <string name="cancel">Vazgeç</string>
+    <string name="retry">Tekrar dene</string>
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_delete_data_title">Verilerimi sil</string>
+    <string name="settings_delete_data_body">Araç profilinizi, şarj geçmişinizi, kayıtlı konumunuzu ve önbellekteki fiyatları hem bu telefondan hem sunucularımızdan siler. Bu işlem geri alınamaz.</string>
+    <string name="settings_delete_data_action">Verilerimi sil</string>
+    <string name="settings_delete_data_progress">Siliniyor…</string>
+    <string name="settings_delete_data_done">Verileriniz silindi.</string>
+    <string name="settings_delete_data_subscription_kept">Abonelik kaydınız korundu: satış kaydını saklamak muhasebe mevzuatı gereği zorunlu ve silmek ödediğiniz erişimi kapatırdı.</string>
+    <string name="settings_delete_data_error">Hiçbir şey silinmedi: %1$s</string>
+    <string name="settings_delete_confirm_title">Her şey silinsin mi?</string>
+    <string name="settings_delete_confirm_body">Araç profiliniz, şarj geçmişiniz, kayıtlı konumunuz ve önbellekteki fiyatlar bu telefondan ve sunucularımızdan kalıcı olarak silinecek. Bu işlem geri alınamaz.</string>
 </resources>

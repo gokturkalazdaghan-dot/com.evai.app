@@ -5,8 +5,14 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
+import android.os.Bundle
+import android.os.CancellationSignal
+import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.CurrentLocationRequest
@@ -124,6 +130,24 @@ class LocationRepository @Inject constructor(
     }
 
     /**
+     * Kullanici "Kesin konum" verdi mi?
+     *
+     * Fark onemli: yalnizca "Yaklasik" verildiginde Android konumu
+     * ~1-3 km'lik bir izgaraya yuvarlar ve ayni degeri saatlerce yeniden
+     * kullanir. O modda dakikalik tazelik BEKLENEMEZ; beklersek her
+     * tazelemede bosuna fix isteyip pil tuketiriz.
+     */
+    fun hasPreciseLocationPermission(): Boolean =
+        ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+        ) == PackageManager.PERMISSION_GRANTED
+
+    /** Onbellekteki bir fix'in kabul edilebilir en buyuk yasi. */
+    private fun freshFixMaxAgeMs(): Long =
+        if (hasPreciseLocationPermission()) PRECISE_FIX_MAX_AGE_MS else APPROXIMATE_FIX_MAX_AGE_MS
+
+    /**
      * Konumu tazeler.
      *
      * Izin yoksa ya da fix alinamazsa SON BILINEN gercek konum korunur;
@@ -193,8 +217,108 @@ class LocationRepository @Inject constructor(
                 // saglayicilarinda gecerli bir fix duruyor olabiliyor.
                 // Bu adim olmadan uygulama o cihazlarda hic konum
                 // bulamiyordu.
+                // DORDUNCU YOL: platform saglayicisindan AKTIF fix istegi.
+                //
+                // platformLastKnown() yalnizca ONBELLEGI okur. Play
+                // Services yolu kisitlanmis cihazlarda o onbellek saatler
+                // once donmus olabiliyor -- olculdu: bir Xiaomi/HyperOS
+                // cihazinda `dumpsys location` altinda "Active Records by
+                // Provider" tamamen bostu, yani fusedClient'in fix istegi
+                // sisteme HIC ulasmiyordu. O cihazda uygulama, aktif bir
+                // platform istegi olmadan asla taze konum alamaz.
+                ?: platformFreshFix()
                 ?: platformLastKnown()
         }
+
+    /**
+     * Platformun kendi saglayicilarindan taze bir fix ISTER.
+     *
+     * Once network (kapali alanda saniyeler icinde doner), sonra GPS.
+     */
+    @Suppress("MissingPermission")
+    private suspend fun platformFreshFix(): Pair<Double, Double>? {
+        val manager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+            ?: return null
+
+        val providers = runCatching {
+            listOf(LocationManager.NETWORK_PROVIDER, LocationManager.GPS_PROVIDER)
+                .filter { manager.isProviderEnabled(it) }
+        }.getOrElse { emptyList() }
+
+        for (provider in providers) {
+            // GPS'e daha uzun sure taniniyor: kapali alanda ya da sogumus
+            // bir alicida kilit saniyeler surer. Network saglayicisi ise
+            // ya hemen doner ya hic donmez, uzun beklemenin faydasi yok.
+            val budget = if (provider == LocationManager.GPS_PROVIDER) {
+                GPS_FIX_TIMEOUT_MS
+            } else {
+                NETWORK_FIX_TIMEOUT_MS
+            }
+
+            val fix = runCatching {
+                withTimeoutOrNull(budget) { singleFix(manager, provider) }
+            }.onFailure { Log.w(TAG, "Platform fix istegi basarisiz: $provider (${it.message})") }
+                .getOrNull()
+
+            if (fix != null) {
+                Log.i(TAG, "Taze fix platform saglayicisindan alindi: $provider")
+                return fix
+            }
+            Log.i(TAG, "Platform saglayicisi konum vermedi: $provider")
+        }
+        return null
+    }
+
+    /**
+     * Tek bir konum okumasi.
+     *
+     * API 30+ bunun icin `getCurrentLocation` sunuyor; altinda tek yol
+     * bir dinleyici kaydedip ILK sonuctan sonra kaldirmak. Dinleyici
+     * kaldirilmazsa GPS acik kalir ve pili bitirir -- iptal yolunda da
+     * kaldiriliyor olmasinin sebebi bu.
+     */
+    @Suppress("MissingPermission")
+    private suspend fun singleFix(
+        manager: LocationManager,
+        provider: String,
+    ): Pair<Double, Double>? = suspendCancellableCoroutine { continuation ->
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val signal = CancellationSignal()
+            continuation.invokeOnCancellation { signal.cancel() }
+
+            manager.getCurrentLocation(
+                provider,
+                signal,
+                ContextCompat.getMainExecutor(context),
+            ) { location ->
+                if (continuation.isActive) {
+                    continuation.resume(location?.let { it.latitude to it.longitude })
+                }
+            }
+        } else {
+            val listener = object : LocationListener {
+                override fun onLocationChanged(location: Location) {
+                    manager.removeUpdates(this)
+                    if (continuation.isActive) {
+                        continuation.resume(location.latitude to location.longitude)
+                    }
+                }
+
+                override fun onProviderDisabled(provider: String) {
+                    manager.removeUpdates(this)
+                    if (continuation.isActive) continuation.resume(null)
+                }
+
+                override fun onProviderEnabled(provider: String) = Unit
+
+                @Deprecated("API 29'da kaldirildi ama API 26'da soyut uye")
+                override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) = Unit
+            }
+
+            continuation.invokeOnCancellation { manager.removeUpdates(listener) }
+            manager.requestLocationUpdates(provider, 0L, 0f, listener, Looper.getMainLooper())
+        }
+    }
 
     /**
      * Sistemin gps/network saglayicilarindaki EN TAZE son bilinen konum.
@@ -208,24 +332,41 @@ class LocationRepository @Inject constructor(
         val manager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
             ?: return null
 
-        val cutoff = System.currentTimeMillis() - PLATFORM_FIX_MAX_AGE_MS
-
         return runCatching {
             manager.getProviders(true)
                 .mapNotNull { provider -> manager.getLastKnownLocation(provider) }
-                .filter { it.time >= cutoff }
-                .maxByOrNull { it.time }
+                .filter { it.ageMillis() <= PLATFORM_FIX_MAX_AGE_MS }
+                .minByOrNull { it.ageMillis() }
                 ?.let { it.latitude to it.longitude }
         }.onFailure { Log.w(TAG, "Platform konum saglayicisi okunamadi.", it) }
             .getOrNull()
     }
 
+    /**
+     * Fused saglayicinin onbellekteki son konumu -- YALNIZCA TAZEYSE.
+     *
+     * YAS SINIRI NEDEN SART
+     * ---------------------
+     * `fusedClient.lastLocation` KEYFI OLCUDE ESKI bir fix dondurebilir:
+     * gunler oncesine ait, baska bir sehirde alinmis bir konum. Bu cagri
+     * zincirin ILK adimi oldugu ve bos donmedigi surece `currentLocation()`
+     * hic calismadigi icin, uygulama o eski koordinata KILITLENIYORDU --
+     * kullanici nereye giderse gitsin harita ayni yeri gosteriyordu.
+     *
+     * Zincirin diger iki adiminda yas siniri zaten vardi; eksik olan
+     * yalnizca burasiydi.
+     */
     @Suppress("MissingPermission") // hasLocationPermission() ile dogrulandi
     private suspend fun lastLocation(): Pair<Double, Double>? =
         suspendCancellableCoroutine { continuation ->
             fusedClient.lastLocation
                 .addOnSuccessListener { location ->
-                    continuation.resume(location?.let { it.latitude to it.longitude })
+                    val maxAge = freshFixMaxAgeMs()
+                    val fresh = location?.takeIf { it.ageMillis() <= maxAge }
+                    if (location != null && fresh == null) {
+                        Log.i(TAG, "Onbellekteki konum cok eski (${location.ageMillis()} ms); taze fix istenecek.")
+                    }
+                    continuation.resume(fresh?.let { it.latitude to it.longitude })
                 }
                 .addOnFailureListener { continuation.resume(null) }
         }
@@ -239,10 +380,11 @@ class LocationRepository @Inject constructor(
                 // yalnizca COARSE izni verilmis cihazlarda HIGH_ACCURACY
                 // istegi bos donebiliyor.
                 .setPriority(Priority.PRIORITY_BALANCED_POWER_ACCURACY)
-                // 10 dakikalik bir fix, sarj istasyonu aramak icin FAZLASIYLA
-                // taze. Onceki 60 sn cok darda: cihazin elindeki gecerli
-                // konumu reddedip yeni fix beklemeye zorluyordu.
-                .setMaxUpdateAgeMillis(10 * 60_000)
+                // Onbellekten kabul edilecek en eski fix. 10 dakikaydi:
+                // uygulama acikken konum 10 dakika boyunca DONUYORDU.
+                // Zincirin her adimi AYNI tazelik tanimini kullanmali,
+                // yoksa bir adim otekinin reddettigini geri getirir.
+                .setMaxUpdateAgeMillis(freshFixMaxAgeMs())
                 // Vazgecme suresi: bu olmadan cagri sinirsiz beklerdi.
                 .setDurationMillis(FIX_TIMEOUT_MS)
                 .build()
@@ -343,10 +485,16 @@ enum class LocationStatus {
  * 12 sn: acik havada bir fix genelde 1-3 saniyede gelir. Bundan
  * uzun beklemek, kapali alanda oturan bir kullaniciyi bosuna bekletir.
  */
-private const val FIX_TIMEOUT_MS = 12_000L
+private const val FIX_TIMEOUT_MS = 8_000L
 
 /** Tum zincir (son bilinen + taze fix) icin ust sinir. */
-private const val OVERALL_TIMEOUT_MS = 15_000L
+private const val OVERALL_TIMEOUT_MS = 32_000L
+
+/** Network saglayicisi icin sure: ya hizli doner ya hic donmez. */
+private const val NETWORK_FIX_TIMEOUT_MS = 6_000L
+
+/** GPS icin sure: sogumus bir alicida kilit 10 saniyeyi bulabilir. */
+private const val GPS_FIX_TIMEOUT_MS = 12_000L
 
 /**
  * Platform saglayicisindan kabul edilecek en eski fix.
@@ -356,7 +504,42 @@ private const val OVERALL_TIMEOUT_MS = 15_000L
  */
 private const val PLATFORM_FIX_MAX_AGE_MS = 2 * 60 * 60 * 1000L
 
-private const val LAST_LOCATION_PREFS = "eva.location"
+/**
+ * Bir konum fix'inin yasi.
+ *
+ * Duvar saati (`Location.time`) DEGIL `elapsedRealtimeNanos`: duvar
+ * saati kullanici ya da sebeke tarafindan degistirilebilir ve o an bir
+ * fix "gelecekten gelmis" ya da saatlerce eski gorunur. Monotonik saat
+ * bu oynamalardan etkilenmez.
+ */
+private fun Location.ageMillis(): Long =
+    (SystemClock.elapsedRealtimeNanos() - elapsedRealtimeNanos) / 1_000_000L
+
+/**
+ * "Kesin konum" izniyle onbellekteki bir fix'in taze sayilma siniri.
+ *
+ * 2 dakika: 100 km/s hizda ~3,3 km'lik sapma demek. Sarj istasyonu
+ * aramak icin kabul edilebilir, ama kullanicinin sehir degistirmesini
+ * fark etmeyecek kadar uzun degil. Daha kisasi her tazelemede GPS
+ * kilidi zorlar ve pili tuketir.
+ */
+private const val PRECISE_FIX_MAX_AGE_MS = 2 * 60_000L
+
+/**
+ * "Yaklasik konum" izniyle ayni sinir.
+ *
+ * 20 dakika: yaklasik konum zaten ~1-3 km'lik izgaraya yuvarlanmis ve
+ * sistem tarafindan saatlik olarak tazelenir. Bundan kisa bir esik,
+ * sistemin vermeyecegi bir tazeligi talep edip her turda bos yere fix
+ * istemek olurdu -- pil gider, konum degismez.
+ */
+private const val APPROXIMATE_FIX_MAX_AGE_MS = 20 * 60_000L
+
+/**
+ * Bu ad DataDeletionRepository tarafindan da okunur; bkz.
+ * STATIONS_CACHE_PREFS uzerindeki ayni gerekce.
+ */
+internal const val LAST_LOCATION_PREFS = "eva.location"
 private const val KEY_LAT = "lastLat"
 private const val KEY_LON = "lastLon"
 private const val KEY_LABEL = "lastLabel"

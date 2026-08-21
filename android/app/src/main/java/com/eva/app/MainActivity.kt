@@ -31,7 +31,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -48,6 +51,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.annotation.StringRes
 import androidx.compose.ui.res.stringResource
@@ -56,6 +60,7 @@ import com.eva.app.location.LocationStatus
 import com.eva.app.location.LocationViewModel
 import com.eva.app.ui.location.LocationRequiredScreen
 import com.eva.app.ui.dashboard.DashboardScreen
+import com.eva.app.ui.settings.SettingsScreen
 import com.eva.app.ui.stations.StationDetailScreen
 import com.eva.app.ui.stations.StationDto
 import com.eva.app.ui.stations.StationsScreen
@@ -69,7 +74,7 @@ import com.eva.app.ui.vehicle.VehicleMonitorViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.PermissionStatus
-import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.json.Json
 
@@ -107,6 +112,7 @@ private object EvaRoutes {
     const val VEHICLE = "vehicle"
     const val SUBSCRIPTION = "subscription"
     const val STATION_DETAIL = "station_detail"
+    const val SETTINGS = "settings"
 }
 
 /**
@@ -152,9 +158,27 @@ private fun EvaApp(navController: NavHostController = rememberNavController()) {
     // Sarj istasyonu bulucusu konum OLMADAN calisamaz: "yakinindaki
     // istasyonlar" sorusunun cevabi konuma baglidir. Izin reddedilirse
     // uygulama uydurma bir sehre dusmez, LocationRequiredScreen gosterir.
-    val locationPermission = rememberPermissionState(
-        Manifest.permission.ACCESS_COARSE_LOCATION,
+    // NEDEN IKI IZIN BIRDEN ISTENIYOR
+    // -------------------------------
+    // Yalnizca COARSE istendiginde Android konumu ~1-3 km'lik bir
+    // izgaraya yuvarlar VE ayni yuvarlanmis degeri SAATLERCE yeniden
+    // kullanir. Olculdu: cihazdaki onbellek fix'i 1 saat 57 dakika
+    // eskiydi ve tazelenmiyordu -- harita bu yuzden guncellenmiyordu.
+    // Android 12'den itibaren COARSE istenmisse FINE'a hic yukselinemez,
+    // bu yuzden ikisi BIRLIKTE istenmeli.
+    //
+    // Kullanici yine "Yaklasik" secebilir; uygulama o durumda da calisir,
+    // yalnizca tazelik beklentisi dusuk tutulur (bkz. LocationRepository).
+    val locationPermission = rememberMultiplePermissionsState(
+        listOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        ),
     )
+
+    // Ikisinden HERHANGI biri yeterli: kullanici yalnizca "Yaklasik"
+    // verdiginde allPermissionsGranted false olur ama uygulama calisabilir.
+    val hasLocationPermission = locationPermission.permissions.any { it.status.isGranted }
 
     // Izin bir kez istendi mi? "Bir daha sorma" tespiti icin gerekli:
     // ilk acilista da shouldShowRationale false olur ve bu bayrak
@@ -162,15 +186,37 @@ private fun EvaApp(navController: NavHostController = rememberNavController()) {
     var hasRequestedLocationOnce by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        if (!locationPermission.status.isGranted) {
+        // Kosul "hicbir izin yok" DEGIL "kesin konum yok": yalnizca
+        // "Yaklasik" verilmis bir kullaniciya yukseltme teklifi hic
+        // gosterilmezse, uygulama o cihazda kalici olarak saatlik
+        // tazelenen, ~1-3 km yuvarlanmis bir konuma mahkum olur.
+        // Diyalogun tekrarini Android kendisi sinirlar.
+        if (!locationPermission.permissions.all { it.status.isGranted }) {
             hasRequestedLocationOnce = true
-            locationPermission.launchPermissionRequest()
+            locationPermission.launchMultiplePermissionRequest()
         }
     }
 
-    LaunchedEffect(locationPermission.status.isGranted) {
-        if (locationPermission.status.isGranted) {
-            locationViewModel.refresh()
+    // KONUM NEDEN DONGUDE TAZELENIYOR
+    // -------------------------------
+    // Onceki surumde konum YALNIZCA izin verildigi anda bir kez
+    // okunuyordu. Sonuc: kullanici uygulamayi acik tutup yola cikinca
+    // harita hic guncellenmiyordu -- oturum boyunca ayni koordinatta
+    // kaliyordu. Sarj istasyonu bulmak dogrudan konuma bagli oldugu icin
+    // bu, uygulamanin ana isini bozan bir davranisti.
+    //
+    // repeatOnLifecycle(RESUMED): uygulama one gelince hemen tazeler ve
+    // acik kaldigi surece tekrarlar; arka plana dusunce KENDILIGINDEN
+    // durur, boylece arka planda pil ve konum tuketmeyiz.
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner, hasLocationPermission) {
+        if (!hasLocationPermission) return@LaunchedEffect
+
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            while (true) {
+                locationViewModel.refresh()
+                delay(LOCATION_REFRESH_INTERVAL_MS)
+            }
         }
     }
 
@@ -211,20 +257,25 @@ private fun EvaApp(navController: NavHostController = rememberNavController()) {
             location = location,
             locationStatus = locationStatus,
             onRequestLocationPermission = {
-                if (locationPermission.status.isGranted) {
+                if (hasLocationPermission) {
                     // Izin zaten var: buton "tekrar dene" anlamina gelir.
                     scope.launch { locationViewModel.refresh() }
                 } else {
                     hasRequestedLocationOnce = true
-                    locationPermission.launchPermissionRequest()
+                    locationPermission.launchMultiplePermissionRequest()
                 }
             },
             // "Bir daha sorma" secildiginde shouldShowRationale false olur
             // ve izin istegi sessizce hicbir sey yapmaz; bu durumda
             // kullaniciyi ayarlara yonlendirmek gerekir.
+            // Kalici ret: hicbiri verilmemis VE hicbiri icin gerekce
+            // ekrani gosterilemiyor. Tek bir izne bakmak yeterli degil --
+            // FINE reddedilip COARSE verilmis olabilir.
             isLocationPermanentlyDenied = hasRequestedLocationOnce &&
-                (locationPermission.status as? PermissionStatus.Denied)
-                    ?.shouldShowRationale == false,
+                !hasLocationPermission &&
+                locationPermission.permissions.none {
+                    (it.status as? PermissionStatus.Denied)?.shouldShowRationale == true
+                },
             selectedStation = selectedStation,
             onStationSelected = { station ->
                 selectedStation = station
@@ -269,8 +320,18 @@ private fun EvaNavHost(
                 currentLat = location.lat,
                 currentLon = location.lon,
                 locationLabel = location.label,
+                isLocationStale = !location.isPrecise,
                 onStationSelected = onStationSelected,
+                onSettingsClick = { navController.navigate(EvaRoutes.SETTINGS) },
             )
+        }
+
+        // Ayarlar alt sekmelerde DEGIL: kullanicinin gunluk akisinda yeri
+        // yok, ama gizlilik politikasinin vaat ettigi "Verilerimi sil"
+        // yolunun uygulama icinden erisilebilir olmasi Play tarafindan
+        // zorunlu. Panel basligindaki disli simgesinden aciliyor.
+        composable(EvaRoutes.SETTINGS) {
+            SettingsScreen(onBack = { navController.popBackStack() })
         }
 
         composable(EvaRoutes.STATIONS_LIST) {
@@ -394,3 +455,13 @@ private fun LocationGate(
         }
     }
 }
+
+/**
+ * Uygulama one gelmisken konumun tazelenme araligi.
+ *
+ * 60 saniye: surerken haritanin geride kalmayacagi, ama surekli GPS
+ * kilidi zorlayip pili tuketmeyecegi bir orta nokta. Tazeleme cagrisi
+ * zaten 2 dakikadan taze bir fix varsa onbellekten donuyor; bu deger
+ * yalnizca "ne siklikta bakalim" sorusunu cevapliyor.
+ */
+private const val LOCATION_REFRESH_INTERVAL_MS = 60_000L

@@ -17,6 +17,7 @@ import {
   SubscriptionEntitlementEntity,
 } from './entitlements/entitlement.entity';
 import { DevicesModule } from './devices/devices.module';
+import { PrivacyModule } from './privacy/privacy.module';
 import { CacheModule } from './cache/cache.module';
 import { IpAllowlistMiddleware } from './common/middleware/ip-allowlist.middleware';
 import {
@@ -78,13 +79,10 @@ import { DevicePublicKeyEntity } from './devices/entities/device-public-key.enti
     RedisModule.forRoot({
       type: 'single',
       url: process.env.REDIS_URL ?? 'redis://localhost:6379',
-      // isGlobal:true olmadan yalnızca RedisModule'ü DOĞRUDAN import eden
-      // modüller @InjectRedis() kullanabilir. RequestSignatureGuard
-      // (StationsModule, VoiceModule) ve GeohashCacheService (CacheModule)
-      // gibi birden çok modülde Redis'e ihtiyaç duyulduğu için global
-      // yapılması, her modülde RedisModule'ü ayrıca import etme
-      // zorunluluğunu ortadan kaldırıyor.
-     
+      // Not: burada isGlobal gibi bir seçenek YOK ve gerekmiyor —
+      // @nestjs-modules/ioredis'in RedisCoreModule'ü zaten @Global()
+      // olarak işaretli, bu yüzden @InjectRedis() her modülde çalışır
+      // (RequestSignatureGuard, GeohashCacheService, DataDeletionService).
     }),
 
     CacheModule,
@@ -97,6 +95,7 @@ import { DevicePublicKeyEntity } from './devices/entities/device-public-key.enti
     ScheduleModule.forRoot(),
     EntitlementsModule,
     TelemetryModule,
+    PrivacyModule,
   ],
   providers: [
     {

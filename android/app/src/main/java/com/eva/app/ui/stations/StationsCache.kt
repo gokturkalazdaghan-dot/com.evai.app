@@ -9,7 +9,12 @@ import kotlinx.serialization.json.Json
 import kotlin.math.abs
 
 private const val TAG = "StationsCache"
-private const val PREFS = "eva.stations.cache"
+/**
+ * Bu ad DataDeletionRepository tarafindan da okunur: "verilerimi sil"
+ * akisi bu depoyu temizlemek zorunda. Adi burada tek yerde tutmak,
+ * degistirildiginde silme akisinin sessizce eksik kalmasini onler.
+ */
+internal const val STATIONS_CACHE_PREFS = "eva.stations.cache"
 private const val KEY_PAYLOAD = "lastNearby"
 
 /**
@@ -63,7 +68,7 @@ data class CachedStations(
  */
 class StationsCache(context: Context) {
 
-    private val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+    private val prefs = context.getSharedPreferences(STATIONS_CACHE_PREFS, Context.MODE_PRIVATE)
     private val json = Json { ignoreUnknownKeys = true }
 
     fun save(stations: List<StationDto>, lat: Double, lon: Double) {

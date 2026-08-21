@@ -49,6 +49,7 @@
     <!-- Panel / asistan metinleri -->
     <string name="dashboard_title">Buscar cargadores</string>
     <string name="dashboard_near">Cerca de %1$s</string>
+    <string name="dashboard_location_stale">Última ubicación conocida</string>
     <string name="dashboard_filter">Filtrar</string>
     <string name="battery_health">Salud de la batería</string>
     <string name="battery_health_excellent">Excelente</string>
@@ -155,4 +156,17 @@
     <string name="legal_terms_of_service">Términos del servicio</string>
     <string name="legal_link_unavailable">Este enlace aún no está disponible.</string>
     <string name="legal_link_no_browser">No se encontró ningún navegador.</string>
+    <string name="back">Atrás</string>
+    <string name="cancel">Cancelar</string>
+    <string name="retry">Reintentar</string>
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_delete_data_title">Eliminar mis datos</string>
+    <string name="settings_delete_data_body">Elimina tu perfil de vehículo, el historial de carga, la ubicación guardada y los precios en caché de este teléfono y de nuestros servidores. Esta acción no se puede deshacer.</string>
+    <string name="settings_delete_data_action">Eliminar mis datos</string>
+    <string name="settings_delete_data_progress">Eliminando…</string>
+    <string name="settings_delete_data_done">Tus datos han sido eliminados.</string>
+    <string name="settings_delete_data_subscription_kept">Se conservó el registro de tu suscripción: la normativa contable obliga a guardar el comprobante de compra, y eliminarlo cortaría el acceso que has pagado.</string>
+    <string name="settings_delete_data_error">No se eliminó nada: %1$s</string>
+    <string name="settings_delete_confirm_title">¿Eliminar todo?</string>
+    <string name="settings_delete_confirm_body">Tu perfil de vehículo, el historial de carga, la ubicación guardada y los precios en caché se eliminarán permanentemente de este teléfono y de nuestros servidores. Esta acción no se puede deshacer.</string>
 </resources>

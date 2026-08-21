@@ -128,4 +128,28 @@ class RequestSigner {
 
     val hasSigningKey: Boolean
         get() = keyStore.containsAlias(SIGNING_KEY_ALIAS)
+
+    /**
+     * İmzalama anahtarını donanım deposundan siler.
+     *
+     * "Verilerimi sil" akışının parçası. Sunucudaki genel anahtar kaydı
+     * silindiğinde bu cihaz artık imza doğrulatamaz; eski özel anahtarı
+     * saklamanın hiçbir faydası kalmaz. Daha önemlisi: anahtar silinip
+     * yeniden üretildiğinde cihaz SUNUCU AÇISINDAN yeni ve bağlantısız
+     * bir kimlik olur — silinen kimliğin aynısıyla geri dönmek, "verimi
+     * sil" isteğini anlamsız kılardı.
+     *
+     * @return silme başarılıysa true
+     */
+    fun deleteKey(): Boolean = try {
+        if (keyStore.containsAlias(SIGNING_KEY_ALIAS)) {
+            keyStore.deleteEntry(SIGNING_KEY_ALIAS)
+        }
+        true
+    } catch (e: Exception) {
+        // Anahtar silinemese bile sunucudaki veri gitmiş olur; akışı
+        // burada durdurmak kullanıcıyı yarım silinmiş bir durumda bırakır.
+        Log.e(TAG, "İmzalama anahtarı silinemedi.", e)
+        false
+    }
 }
