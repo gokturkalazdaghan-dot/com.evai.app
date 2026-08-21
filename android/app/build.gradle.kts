@@ -187,6 +187,24 @@ android {
 
     buildTypes {
         release {
+            // YEREL KOD HATA AYIKLAMA SEMBOLLERI
+            //
+            // Play "hata ayiklama sembolleri yuklemediniz" uyarisi
+            // veriyor. Paketteki TEK yerel kutuphane AndroidX'e ait
+            // (libandroidx.graphics.path.so) ve Google onu zaten
+            // SEMBOLLERI CIKARILMIS halde yayinliyor -- eklenecek
+            // sembol yok, uyari bu haliyle kapatilamaz.
+            //
+            // Pratikte sorun degil: kendi kodumuz Kotlin ve cokme
+            // izlerinin cozumlemesi ProGuard haritasiyla yapiliyor,
+            // o harita pakete dahil.
+            //
+            // Ayar burada duruyor cunku ileride KENDI yerel kodumuzu
+            // eklersek sembolleri kendiliginden toplanacak.
+            ndk {
+                debugSymbolLevel = "FULL"
+            }
+
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
