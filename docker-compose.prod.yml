@@ -54,8 +54,8 @@ services:
       DEVICE_ATTESTATION_ENFORCED: "true"
 
       ADMIN_API_KEY: ${ADMIN_API_KEY:?ADMIN_API_KEY gerekli}
-      APPLE_APP_BUNDLE_ID: com.eva.app
-      ANDROID_PACKAGE_NAME: com.eva.app
+      APPLE_APP_BUNDLE_ID: com.evai.app
+      ANDROID_PACKAGE_NAME: com.evai.app
 
       REVENUECAT_WEBHOOK_AUTH_SECRET: ${REVENUECAT_WEBHOOK_AUTH_SECRET:?webhook secret gerekli}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}

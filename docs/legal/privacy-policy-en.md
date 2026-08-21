@@ -5,7 +5,7 @@ title: Privacy Policy
 # EVA AI — Privacy Policy
 
 **Last updated:** 21 August 2026
-**App:** EVA AI (`com.eva.app`)
+**App:** EVA AI (`com.evai.app`)
 
 This policy explains what data the EVA AI mobile app collects, why it is
 collected, and what rights you have over it.

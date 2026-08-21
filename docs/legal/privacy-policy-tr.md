@@ -5,7 +5,7 @@ title: Gizlilik Politikası
 # EVA AI — Gizlilik Politikası
 
 **Son güncelleme:** 21 Ağustos 2026
-**Uygulama:** EVA AI (`com.eva.app`)
+**Uygulama:** EVA AI (`com.evai.app`)
 
 Bu politika, EVA AI mobil uygulamasının hangi verileri topladığını, neden
 topladığını ve bu veriler üzerinde hangi haklara sahip olduğunuzu açıklar.

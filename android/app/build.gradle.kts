@@ -46,7 +46,11 @@ android {
     useLibrary("android.car")
 
     defaultConfig {
-        applicationId = "com.eva.app"
+        // MAGAZA KIMLIGI: Play Console bu uygulamayi com.evai.app olarak
+        // kaydetti. namespace (com.eva.app) Kotlin paket yapisidir ve
+        // AYNI KALIR -- ikisi bagimsizdir, namespace'i degistirmek her
+        // dosyadaki paket bildirimini yeniden yazmak olurdu.
+        applicationId = "com.evai.app"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

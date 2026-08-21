@@ -5,7 +5,7 @@ title: Terms of Service
 # EVA AI — Terms of Service
 
 **Last updated:** 21 August 2026
-**App:** EVA AI (`com.eva.app`)
+**App:** EVA AI (`com.evai.app`)
 
 By installing or using EVA AI you agree to these terms.
 

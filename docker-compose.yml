@@ -73,8 +73,8 @@ services:
       REDIS_URL: redis://redis:6379
       DEVICE_ATTESTATION_ENFORCED: "false"
       ADMIN_API_KEY: ${ADMIN_API_KEY:-dev_only_admin_key_minimum_32_characters_xx}
-      APPLE_APP_BUNDLE_ID: com.eva.app
-      ANDROID_PACKAGE_NAME: com.eva.app
+      APPLE_APP_BUNDLE_ID: com.evai.app
+      ANDROID_PACKAGE_NAME: com.evai.app
       REVENUECAT_WEBHOOK_AUTH_SECRET: ${REVENUECAT_WEBHOOK_AUTH_SECRET:-dev_only_revenuecat_secret_min24}
       # Web yuzeyi aboneligi icin; tanimsizsa Stripe ucu KAPALI kalir
       # (yapilandirilmamis bir odeme webhook'unu acik birakmak,

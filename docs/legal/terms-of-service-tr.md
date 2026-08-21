@@ -5,7 +5,7 @@ title: Kullanım Şartları
 # EVA AI — Kullanım Şartları
 
 **Son güncelleme:** 21 Ağustos 2026
-**Uygulama:** EVA AI (`com.eva.app`)
+**Uygulama:** EVA AI (`com.evai.app`)
 
 EVA AI'ı kurarak veya kullanarak bu şartları kabul etmiş olursunuz.
 
