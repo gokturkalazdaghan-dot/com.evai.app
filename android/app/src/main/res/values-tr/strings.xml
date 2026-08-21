@@ -149,4 +149,9 @@
     <string name="trial_weeks_free">%1$d hafta ücretsiz</string>
 
     <string name="label_connector">Soket</string>
+
+    <string name="legal_privacy_policy">Gizlilik Politikası</string>
+    <string name="legal_terms_of_service">Kullanım Şartları</string>
+    <string name="legal_link_unavailable">Bu bağlantı henüz kullanılamıyor.</string>
+    <string name="legal_link_no_browser">Bu cihazda tarayıcı bulunamadı.</string>
 </resources>

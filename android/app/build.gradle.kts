@@ -23,7 +23,16 @@ val localProperties = Properties().apply {
     }
 }
 localProperties.forEach { (key, value) ->
-    project.extra.set(key.toString(), value.toString())
+    val name = key.toString()
+    // ONCELIK: -P / gradle.properties / ortam degiskeni > local.properties
+    //
+    // Onceden local.properties KOSULSUZ eziyordu; komut satirindan
+    // "-PEVA_GATEWAY_BASE_URL_RELEASE=..." vermek hicbir sey degistirmiyor,
+    // derleme sessizce gelistiricinin yerel degerini kullaniyordu.
+    // CI'da bu, yanlis sunucuya baglanan bir yayin paketi demektir.
+    if (!project.hasProperty(name)) {
+        project.extra.set(name, value.toString())
+    }
 }
 
 android {
@@ -44,6 +53,19 @@ android {
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Yasal belge adresleri. Play, abonelik satan uygulamalarda
+        // bunlarin uygulama ICINDEN acilabilmesini sart kosuyor.
+        buildConfigField(
+            "String",
+            "PRIVACY_POLICY_URL",
+            "\"${project.findProperty("PRIVACY_POLICY_URL") ?: ""}\"",
+        )
+        buildConfigField(
+            "String",
+            "TERMS_OF_SERVICE_URL",
+            "\"${project.findProperty("TERMS_OF_SERVICE_URL") ?: ""}\"",
+        )
 
         // RevenueCat anahtari YAYIN derlemesinde 'goog_' ile BASLAMAK
         // ZORUNDA. SDK baska bir oneki tanimiyor, "API Key is not
@@ -263,4 +285,20 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+}
+
+android {
+    signingConfigs {
+        create("release") {
+            storeFile = file("release-key.jks")
+            storePassword = "123456"
+            keyAlias = "my-key-alias"
+            keyPassword = "123456"
+        }
+    }
+    buildTypes {
+        getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
 }

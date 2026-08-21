@@ -44,3 +44,18 @@ android/local.properties
 
 # Eski dosya yedekleri (sir icerebilir)
 _archive/
+
+# --- Imza anahtarlari: ASLA surum kontrolune girmez ---
+# Sizarsa, o anahtarla herkes uygulamaya guncelleme yayinlayabilir.
+*.jks
+*.keystore
+*.p12
+!**/debug.keystore
+keystore.properties
+
+# --- Yerel yapilandirma: GERCEK anahtarlari tasir ---
+# Onceden yalnizca "android/local.properties" yaziliydi; kok dizindeki
+# local.properties korumasizdi ve icinde Maps + RevenueCat anahtarlari
+# vardi -- bir sonraki commit'te GitHub'a gidecekti.
+local.properties
+**/local.properties

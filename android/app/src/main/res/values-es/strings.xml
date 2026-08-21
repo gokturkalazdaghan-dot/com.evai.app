@@ -150,4 +150,9 @@
     <string name="trial_weeks_free">%1$d semanas gratis</string>
 
     <string name="label_connector">Conector</string>
+
+    <string name="legal_privacy_policy">Política de privacidad</string>
+    <string name="legal_terms_of_service">Términos del servicio</string>
+    <string name="legal_link_unavailable">Este enlace aún no está disponible.</string>
+    <string name="legal_link_no_browser">No se encontró ningún navegador.</string>
 </resources>

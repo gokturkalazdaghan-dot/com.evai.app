@@ -176,6 +176,8 @@ private fun LoadedState(
             Text(stringResource(R.string.action_restore_purchases))
         }
 
+        LegalLinks()
+
         state.errorMessage?.let { message ->
             Spacer(Modifier.height(12.dp))
             ErrorCard(message = message, onDismiss = onDismissError)

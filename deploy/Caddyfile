@@ -1,0 +1,75 @@
+# deploy/Caddyfile
+#
+# Caddy TLS sertifikasini kendisi alir ve yeniler. Elle sertifika
+# yonetimi, yenilemenin unutuldugu gun TUM kullanicilarin baglanamamasi
+# demektir -- ve bu sessizce olur, uygulama yalnizca "baglanamiyor" der.
+
+{
+	email {$ACME_EMAIL}
+
+	# Sunucu surumunu ve teknolojisini duyurmaya gerek yok.
+	servers {
+		metrics
+	}
+}
+
+{$EVA_DOMAIN} {
+	encode zstd gzip
+
+	# --- Guvenlik basliklari ---
+	header {
+		# Tarayici bu alan adina bir yil boyunca YALNIZCA HTTPS ile
+		# baglansin. Ilk istekte http'ye dusme penceresini kapatir.
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+		# Yanit MIME turunu tarayici TAHMIN ETMESIN; JSON'u HTML sanip
+		# calistirmasi bir XSS yoludur.
+		X-Content-Type-Options "nosniff"
+
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+
+		# Sunucu yazilimini gizle.
+		-Server
+	}
+
+	# --- WebSocket: canli telemetri ---
+	# Panel /telemetry ad alanina baglanir; yukseltme basliklari
+	# aktarilmazsa baglanti sessizce HTTP'ye duser ve panel hic veri
+	# almaz.
+	@websocket {
+		header Connection *Upgrade*
+		header Upgrade websocket
+	}
+	reverse_proxy @websocket gateway:3000
+
+	# --- Normal API trafigi ---
+	reverse_proxy gateway:3000 {
+		# Gercek istemci IP'si: hiz sinirlama ve admin IP listesi bunu
+		# kullanir. Aktarilmazsa her istek Caddy'den geliyormus gibi
+		# gorunur ve IP bazli her kural islevsiz kalir.
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+
+		# Gateway ayaga kalkarken gelen istekler 502 yerine beklesin.
+		health_uri /health
+		health_interval 10s
+		health_timeout 3s
+	}
+
+	log {
+		output file /data/access.log {
+			roll_size 10MiB
+			roll_keep 5
+		}
+		# Saglik kontrolleri gunlugu doldurmasin.
+		format filter {
+			wrap json
+			fields {
+				request>headers>Authorization delete
+				request>headers>X-Eva-Signature delete
+			}
+		}
+	}
+}

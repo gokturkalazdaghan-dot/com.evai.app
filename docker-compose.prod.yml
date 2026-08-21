@@ -24,7 +24,11 @@ services:
     # Veritabani DISARIYA ACILMAZ. Gelistirmede 5432 acik cunku psql ile
     # baglanmak pratik; uretimde ayni port, internete acik bir saldiri
     # yuzeyidir. Servisler birbirine ic ag uzerinden erisir.
-    ports: []
+    #
+    # !reset SART: Compose port listelerini BIRLESTIRIR. Sadece "ports: []"
+    # yazmak temel dosyadaki 5432'yi KALDIRMAZ -- olculdu, port acik
+    # kaliyordu.
+    ports: !reset []
     volumes:
       - eva_postgres_data:/var/lib/postgresql/data
       # Sema YALNIZCA ilk olusturmada calisir. Uretimde migration'lar elle
@@ -32,7 +36,7 @@ services:
       - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
 
   redis:
-    ports: []
+    ports: !reset []
     command: >
       redis-server
       --requirepass ${REDIS_PASSWORD:?REDIS_PASSWORD gerekli}
@@ -70,7 +74,7 @@ services:
 
     # Gateway'e DISARIDAN dogrudan erisilmez; onunde Caddy durur ve TLS'i
     # o sonlandirir. Port acmak, HTTPS'i atlayan bir yol birakmak olurdu.
-    ports: []
+    ports: !reset []
     networks:
       - eva-network
     deploy:
@@ -85,7 +89,7 @@ services:
       INTERNAL_SERVICE_MASTER_SECRET: ${INTERNAL_SERVICE_MASTER_SECRET:?ic servis siri gerekli}
       OPENCHARGEMAP_API_KEY: ${OPENCHARGEMAP_API_KEY:?OCM anahtari gerekli}
       GROQ_API_KEY: ${GROQ_API_KEY:-}
-    ports: []
+    ports: !reset []
     deploy:
       resources:
         limits:

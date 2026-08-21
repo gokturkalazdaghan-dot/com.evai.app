@@ -5,6 +5,8 @@
     [string]$ApkPath = "android/app/build/outputs/apk/debug/app-debug.apk"
 )
 
+$adbPath = "$env:USERPROFILE\AppData\Local\Android\Sdk\platform-tools\adb.exe"
+
 function Show-Help {
     Write-Host "==========================================" -ForegroundColor Cyan
     Write-Host "         EVA AI - ADB Yardimcisi          " -ForegroundColor Yellow
@@ -23,7 +25,7 @@ function Show-Help {
 switch ($Action) {
     "devices" {
         Write-Host "Bagli Android cihazlar taraniyor..." -ForegroundColor Green
-        adb devices
+        & $adbPath devices
     }
     "build" {
         Write-Host "Android APK derleniyor (Gradle)..." -ForegroundColor Yellow
@@ -35,7 +37,7 @@ switch ($Action) {
     "install" {
         if (Test-Path $ApkPath) {
             Write-Host "APK cihaza kuruluyor: $ApkPath" -ForegroundColor Green
-            adb install -r $ApkPath
+            & $adbPath install -r $ApkPath
             Write-Host "Kurulum basariyla tamamlandi!" -ForegroundColor Cyan
         } else {
             Write-Host "HATA: APK dosyasi bulunamadi! Once '.\adb.ps1 build' calistirin." -ForegroundColor Red
@@ -43,7 +45,7 @@ switch ($Action) {
     }
     "logs" {
         Write-Host "EVA AI Logcat filtrelemesi baslatiliyor (Cikmak icin CTRL+C)..." -ForegroundColor Yellow
-        adb logcat -s "EvaApp", "ObdBleClient", "Telemetry"
+        & $adbPath logcat -s "EvaApp", "ObdBleClient", "Telemetry"
     }
     Default {
         Show-Help

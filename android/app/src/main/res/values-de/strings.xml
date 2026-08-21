@@ -150,4 +150,9 @@
     <string name="trial_weeks_free">%1$d Wochen gratis</string>
 
     <string name="label_connector">Stecker</string>
+
+    <string name="legal_privacy_policy">Datenschutz</string>
+    <string name="legal_terms_of_service">Nutzungsbedingungen</string>
+    <string name="legal_link_unavailable">Dieser Link ist noch nicht verfügbar.</string>
+    <string name="legal_link_no_browser">Kein Browser auf diesem Gerät gefunden.</string>
 </resources>
