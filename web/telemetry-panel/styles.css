@@ -1,0 +1,331 @@
+/* web/telemetry-panel/styles.css
+ *
+ * EVA AI telemetri paneli — koyu HUD estetigi, neon camgobegi vurgular.
+ * Palet Android uygulamasiyla AYNI degerleri kullanir (Theme.kt), boylece
+ * iki yuzey tek bir urun gibi gorunur.
+ */
+
+:root {
+  --bg: #05070c;
+  --bg-panel: rgba(13, 20, 32, 0.72);
+  --bg-panel-solid: #0d1420;
+  --border: rgba(0, 229, 255, 0.28);
+  --border-strong: rgba(0, 229, 255, 0.65);
+
+  --cyan: #00e5ff;
+  --green: #39ff14;
+  --purple: #7c4dff;
+  --red: #ff1744;
+  --amber: #ffd60a;
+
+  --ink: #e8f4f8;
+  --ink-muted: #7e93a8;
+
+  --glow: 0 0 12px rgba(0, 229, 255, 0.35);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 700px at 50% 42%, rgba(0, 229, 255, 0.09), transparent 65%),
+    radial-gradient(800px 500px at 15% 90%, rgba(124, 77, 255, 0.07), transparent 60%),
+    var(--bg);
+  color: var(--ink);
+  font-family: 'Rajdhani', system-ui, sans-serif;
+  padding: clamp(10px, 2vw, 26px);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Cerceve ---------- */
+.hud {
+  max-width: 1500px;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(9, 15, 25, 0.9), rgba(5, 8, 14, 0.95));
+  box-shadow: 0 0 60px rgba(0, 229, 255, 0.06), inset 0 0 80px rgba(0, 229, 255, 0.03);
+  overflow: hidden;
+}
+
+.hud-title {
+  position: relative;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+
+.hud-title h1 {
+  margin: 0;
+  font-size: clamp(0.95rem, 1.9vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-shadow: var(--glow);
+}
+
+/* Kose isaretleri — HUD hissi */
+.corner {
+  position: absolute;
+  width: 16px; height: 16px;
+  border: 2px solid var(--border-strong);
+}
+.corner.tl { top: 8px; left: 10px; border-right: 0; border-bottom: 0; }
+.corner.tr { top: 8px; right: 10px; border-left: 0; border-bottom: 0; }
+.corner.bl { bottom: 8px; left: 10px; border-right: 0; border-top: 0; }
+.corner.br { bottom: 8px; right: 10px; border-left: 0; border-top: 0; }
+
+/* ---------- Yerlesim ---------- */
+.grid {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  grid-template-columns: minmax(230px, 1fr) minmax(320px, 2.1fr) minmax(230px, 1fr);
+  grid-template-areas:
+    "battery stage charging"
+    "info    stage alerts";
+}
+
+.panel--battery  { grid-area: battery; }
+.panel--stage    { grid-area: stage; }
+.panel--charging { grid-area: charging; }
+.panel--alerts   { grid-area: alerts; }
+.panel--info     { grid-area: info; }
+
+/* Dar ekranda tek sutuna in; arac en uste gecer. */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    grid-template-areas: "stage" "battery" "charging" "info" "alerts";
+  }
+}
+
+.panel {
+  position: relative;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-panel);
+  backdrop-filter: blur(6px);
+}
+
+.panel--stage {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-color: transparent;
+  background: transparent;
+  backdrop-filter: none;
+}
+
+.panel-label {
+  margin: 0 0 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--cyan);
+  text-shadow: var(--glow);
+}
+
+/* ---------- Okumalar ---------- */
+.readouts { margin: 0; display: grid; gap: 8px; }
+.readouts--stacked { gap: 10px; }
+
+.readouts > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.readouts dt {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--ink-muted);
+}
+
+.readouts dd {
+  margin: 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.02rem;
+  color: var(--ink);
+  /* Sayilar degisirken satir zipzip oynamasin. */
+  font-variant-numeric: tabular-nums;
+}
+
+/* Bilinmeyen deger: soluk. "—" ile "0" gorsel olarak da ayrilmali. */
+.readouts dd.unknown { color: var(--ink-muted); }
+
+.status.connected    { color: var(--green); }
+.status.disconnected { color: var(--red); }
+
+/* ---------- Batarya halkasi ---------- */
+.battery-row { display: flex; align-items: center; gap: 14px; }
+
+.ring-wrap { position: relative; width: 116px; height: 116px; flex-shrink: 0; }
+.ring { width: 100%; height: 100%; transform: rotate(-90deg); }
+
+.ring-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.07);
+  stroke-width: 9;
+}
+
+.ring-value {
+  fill: none;
+  stroke: url(#ringGrad);
+  stroke-width: 9;
+  stroke-linecap: round;
+  /* 2πr, r=50 */
+  stroke-dasharray: 314.16;
+  stroke-dashoffset: 314.16;
+  transition: stroke-dashoffset 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.6));
+}
+
+.ring-center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.ring-value-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.55rem;
+  text-shadow: var(--glow);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Kucuk gecmis cubuklari ---------- */
+.sparkbars {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 34px;
+  margin-top: 14px;
+}
+
+.sparkbars span {
+  flex: 1;
+  min-height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(180deg, var(--cyan), rgba(0, 229, 255, 0.15));
+  transition: height 400ms ease;
+}
+
+/* ---------- Arac sahnesi ---------- */
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+}
+
+.stage-rings { position: absolute; inset: 0; display: grid; place-items: center; }
+
+.stage-ring {
+  position: absolute;
+  border: 1px solid rgba(0, 229, 255, 0.32);
+  border-radius: 50%;
+  /* Perspektif: duz bir daire degil, zemine yatmis bir platform. */
+  transform: rotateX(74deg);
+  animation: ringPulse 4s ease-in-out infinite;
+}
+
+.stage-ring.r1 { width: 52%; height: 52%; }
+.stage-ring.r2 { width: 68%; height: 68%; animation-delay: 0.6s; opacity: 0.65; }
+.stage-ring.r3 { width: 84%; height: 84%; animation-delay: 1.2s; opacity: 0.4; }
+
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.22; }
+  50%      { opacity: 0.7; }
+}
+
+.stage-glow {
+  position: absolute;
+  bottom: 16%;
+  width: 58%;
+  height: 22%;
+  background: radial-gradient(ellipse at center, rgba(0, 229, 255, 0.34), transparent 70%);
+  filter: blur(14px);
+  pointer-events: none;
+}
+
+/*
+ * 360 derece donus.
+ *
+ * Tek bir yandan gorunum resmini Y ekseninde dondurmek, arabayi kagit
+ * gibi ince gosterirdi. Bunun yerine hafif bir yalpalama + olcek nefesi
+ * kullaniliyor: gercek bir vitrin platformunun hissini verir ve tek
+ * gorselle calisir.
+ */
+.car-orbit {
+  position: relative;
+  width: 76%;
+  animation: showcase 9s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+.car {
+  width: 100%;
+  display: block;
+  filter: drop-shadow(0 14px 26px rgba(0, 229, 255, 0.28));
+}
+
+@keyframes showcase {
+  0%   { transform: perspective(900px) rotateY(-16deg) translateY(0); }
+  25%  { transform: perspective(900px) rotateY(0deg)   translateY(-6px); }
+  50%  { transform: perspective(900px) rotateY(16deg)  translateY(0); }
+  75%  { transform: perspective(900px) rotateY(0deg)   translateY(-6px); }
+  100% { transform: perspective(900px) rotateY(-16deg) translateY(0); }
+}
+
+/* Hareket hassasiyeti olan kullanicilar icin: donus durur, panel calisir. */
+@media (prefers-reduced-motion: reduce) {
+  .car-orbit { animation: none; }
+  .stage-ring { animation: none; opacity: 0.4; }
+  .ring-value { transition: none; }
+}
+
+/* ---------- Uyarilar ---------- */
+.alerts { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 0.86rem;
+  letter-spacing: 0.04em;
+}
+
+.dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.alert--ok       { color: var(--green); }
+.alert--warn     { color: var(--amber); }
+.alert--critical { color: var(--red); }
+.alert--idle     { color: var(--ink-muted); }
+
+/* ---------- Alt cubuk ---------- */
+.hud-footer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: clamp(14px, 4vw, 48px);
+  flex-wrap: wrap;
+  padding: 12px 24px;
+  border-top: 1px solid var(--border);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.76rem;
+  color: var(--ink-muted);
+}
+
+.hud-footer b { color: var(--cyan); font-weight: 400; }

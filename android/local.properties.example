@@ -1,0 +1,25 @@
+## android/local.properties.example
+## Bu dosyayı "local.properties" olarak kopyalayıp gerçek değerlerinizi girin.
+## local.properties asla commit edilmemeli (.gitignore'da hariç tutuluyor).
+
+sdk.dir=/Users/YOUR_USERNAME/Library/Android/sdk
+
+## RevenueCat Dashboard -> Project Settings -> API Keys -> Google Play
+REVENUECAT_PUBLIC_API_KEY=goog_XXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+## Yerel geliştirme sırasında emülatörden host makinenizdeki Gateway'e
+## erişim (10.0.2.2, Android emülatöründe "host" anlamına gelir)
+EVA_GATEWAY_BASE_URL_DEBUG=http://10.0.2.2:3000
+
+## Production Gateway adresiniz
+EVA_GATEWAY_BASE_URL_RELEASE=https://api.evaapp.com
+
+## Google Cloud Console -> proje numaranız (Play Integrity API için)
+GOOGLE_CLOUD_PROJECT_NUMBER=123456789012
+
+## Certificate Pinning (had safha güvenlik) -- Gateway sertifikanızın
+## SHA-256 SPKI pin değerleri. Üretim komutu README.md'de. PIN_2 gelecekte
+## yenileyeceğiniz sertifika için YEDEK pin -- boş bırakmayın, aksi halde
+## sertifika yenileme günü tüm kullanıcılar bağlanamaz hale gelir.
+GATEWAY_CERT_PIN_1=sha256/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+GATEWAY_CERT_PIN_2=sha256/BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB=

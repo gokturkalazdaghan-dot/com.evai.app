@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- android/app/src/main/res/values-de/strings.xml (Deutsch) -->
+<resources>
+    <string name="app_name">Eva AI</string>
+
+    <string name="range_warning_title">Reichweite nicht ausreichend</string>
+    <string name="range_warning_body">Ihre Batterie reicht für diese Strecke nicht aus. In der Nähe von %1$s ist ein Ladestopp erforderlich.</string>
+
+    <string name="charge_stop_added">Ladestopp hinzugefügt: %1$s (%2$.0f kW)</string>
+
+    <string name="manifest_unavailable_offline">Für dieses Gebiet liegen noch keine Offline-Ladedaten vor. Aktualisierung erfolgt bei nächster Verbindung.</string>
+
+    <string name="battery_soc">%1$.0f%% geladen</string>
+    <string name="battery_estimated_arrival">Geschätzte Ankunft: %1$.0f%%</string>
+
+    <string name="connector_ccs">CCS</string>
+    <string name="connector_chademo">CHAdeMO</string>
+    <string name="connector_tesla">Tesla (NACS)</string>
+    <string name="connector_type2">Typ 2</string>
+
+    <plurals name="subscription_trial_active">
+        <item quantity="one">Kostenlose Testversion — noch 1 Tag</item>
+        <item quantity="other">Kostenlose Testversion — noch %d Tage</item>
+    </plurals>
+
+    <string name="subscription_price_monthly">%1$s / Monat</string>
+    <string name="subscription_price_yearly">%1$s / Jahr</string>
+
+    <string name="distance_km">%1$.0f km</string>
+    <string name="distance_mi">%1$.0f mi</string>
+
+    <string name="stations_find_nearby">Ladestationen in der Nähe finden</string>
+    <string name="agent_price_updating">Aktuelle Preise werden geprüft…</string>
+    <string name="purchase_restore">Käufe wiederherstellen</string>
+    <string name="purchase_cancelled">Kauf abgebrochen.</string>
+    <string name="purchase_verification_failed">Dieser Kauf konnte nicht bestätigt werden. Bitte versuchen Sie es erneut.</string>
+
+    <string name="onboarding_welcome_title">Willkommen bei Eva</string>
+    <string name="onboarding_welcome_subtitle">Ihr datenschutzorientierter EV-Ladebegleiter</string>
+    <string name="settings_language">Sprache</string>
+    <string name="settings_units">Einheiten</string>
+    <string name="settings_units_metric">Kilometer</string>
+    <string name="settings_units_imperial">Meilen</string>
+
+    <string name="stations_screen_title">Ladestationen in der Nähe</string>
+    <string name="stations_empty_message">In diesem Gebiet wurden keine passenden Stationen gefunden.</string>
+    <string name="stations_retry">Erneut versuchen</string>
+
+    <!-- Panel / asistan metinleri -->
+    <string name="dashboard_title">Ladestationen finden</string>
+    <string name="dashboard_near">In der Nähe von %1$s</string>
+    <string name="dashboard_filter">Filtern</string>
+    <string name="battery_health">Batteriezustand</string>
+    <string name="battery_health_excellent">Ausgezeichnet</string>
+    <string name="battery_health_good">Gut</string>
+    <string name="battery_health_fair">Mittel</string>
+    <string name="cheapest_nearby">Günstigste in der Nähe</string>
+    <string name="cheapest_waiting_price">Preis wird geladen</string>
+    <string name="distance_away">%1$s entfernt</string>
+    <string name="current_charge">Aktueller Ladestand</string>
+    <string name="range_calculating">Reichweite wird berechnet</string>
+    <string name="nearby_stations">Stationen in der Nähe</string>
+    <string name="stations_searching">Stationen werden gesucht…</string>
+    <string name="stations_none_for_vehicle">Keine passenden Stationen in diesem Gebiet.</string>
+    <string name="assistant_ask">Eva fragen</string>
+    <string name="assistant_type">Stattdessen tippen</string>
+    <string name="assistant_send">Senden</string>
+    <string name="assistant_cancel">Abbrechen</string>
+    <string name="battery_health_attention">Achtung</string>
+
+    <string name="battery_alert_channel_name">Batteriewarnungen</string>
+    <string name="battery_alert_channel_description">Warnt dich, wenn der Ladestand sinkt und ein Stopp sinnvoll wird.</string>
+    <string name="battery_alert_low_title">Batterie wird knapp</string>
+    <string name="battery_alert_critical_title">Ladestand kritisch</string>
+
+    <string name="navigation_start">Route starten</string>
+    <string name="navigation_no_maps_app">Auf diesem Gerät wurde keine Karten-App gefunden.</string>
+
+    <string name="vehicle_turntable_description">Dein Fahrzeug auf einem Drehteller. Zum Drehen nach links oder rechts wischen.</string>
+
+    <string name="tab_dashboard">Übersicht</string>
+    <string name="tab_stations">Stationen</string>
+    <string name="tab_vehicle">Mein Auto</string>
+    <string name="tab_premium">Premium</string>
+    <string name="location_resolving">Standort wird ermittelt…</string>
+    <string name="location_needed_title">Für Stationen in der Nähe wird dein Standort benötigt</string>
+    <string name="location_needed_body">Wir können dir nur dann sagen, welche Station nah und günstig ist, wenn wir wissen, wo du bist. Dein Standort bleibt auf dem Gerät und wird nur für die Suche nach Stationen in der Nähe verwendet.</string>
+    <string name="location_unavailable_title">Standort konnte nicht ermittelt werden</string>
+    <string name="location_unavailable_body">Du bist vielleicht in einem Gebäude oder hast schlechten Empfang. Versuche es im Freien erneut.</string>
+    <string name="action_grant_location">Standortzugriff erlauben</string>
+    <string name="action_retry">Erneut versuchen</string>
+    <string name="action_open_settings">Einstellungen öffnen</string>
+    <string name="settings_permission_path">Einstellungen → Berechtigungen → Standort</string>
+    <string name="feedback_prompt">Ein Problem oder eine Idee?</string>
+    <string name="feedback_send">Feedback senden</string>
+    <string name="feedback_copied">Keine E-Mail-App gefunden. Die Nachricht wurde in die Zwischenablage kopiert.</string>
+    <string name="offline_prices">Du bist offline — Preise von %1$s</string>
+    <string name="action_refresh">Aktualisieren</string>
+    <string name="age_just_now">gerade eben</string>
+    <string name="age_minutes">vor %1$d Min.</string>
+    <string name="age_hours">vor %1$d Std.</string>
+    <string name="age_yesterday">von gestern</string>
+    <string name="age_days">vor %1$d Tagen</string>
+
+    <string name="stations_title">Ladestationen in der Nähe</string>
+    <string name="station_not_found">Keine Stationsdaten verfügbar.</string>
+    <string name="action_back_to_list">Zurück zur Liste</string>
+    <string name="label_max_power">Max. Leistung</string>
+    <string name="label_operator">Betreiber</string>
+    <string name="filter_min_power">Mindestleistung</string>
+    <string name="filter_radius">Suchradius</string>
+    <string name="filter_price_known">Nur Stationen mit bekanntem Preis</string>
+    <string name="action_reset">Zurücksetzen</string>
+    <string name="vehicle_title">Mein Auto</string>
+    <string name="vehicle_brand_hint">z. B. Tesla</string>
+    <string name="vehicle_model_hint">z. B. Model 3</string>
+    <string name="vehicle_charge_state">Ladestand</string>
+    <string name="vehicle_current_charge">Aktueller Ladestand</string>
+    <string name="onboarding_title">Richten wir dein Auto ein</string>
+    <string name="onboarding_brand">Marke (z. B. Tesla)</string>
+    <string name="onboarding_model">Modell (z. B. Model 3)</string>
+    <string name="onboarding_charge">Aktueller Ladestand (%)</string>
+    <string name="onboarding_start">Los geht’s</string>
+    <string name="telemetry_from_car">Live aus dem Fahrzeug</string>
+    <string name="telemetry_from_obd">Live vom OBD-Adapter</string>
+    <string name="telemetry_from_cloud">Live aus dem Herstellerkonto</string>
+    <string name="telemetry_interrupted">Verbindung unterbrochen</string>
+    <string name="telemetry_manual">Von dir eingegeben</string>
+    <string name="telemetry_manual_hint">Für automatische Messwerte einen OBD-Bluetooth-Adapter verbinden.</string>
+    <string name="telemetry_waiting">Warte auf Daten</string>
+    <string name="telemetry_waiting_hint">Verbunden, aber derzeit kommen keine Messwerte an.</string>
+    <string name="plan_monthly">Monatlich</string>
+    <string name="plan_annual">Jährlich</string>
+    <string name="action_restore_purchases">Käufe wiederherstellen</string>
+    <string name="subscription_unavailable">Abos sind derzeit nicht verfügbar</string>
+
+    <string name="paywall_tagline">Klüger laden, weniger zahlen.</string>
+    <string name="benefit_live_prices">Live-Preise in allen Ladenetzen</string>
+    <string name="benefit_price_alerts">Benachrichtigung bei Preissenkungen</string>
+    <string name="benefit_route_planning">Routen- und Reichweitenplanung</string>
+    <string name="benefit_no_ads">Keine Werbung</string>
+    <string name="paywall_cta_trial">%1$d Tage kostenlos testen</string>
+    <string name="paywall_cta_subscribe">Premium holen</string>
+    <string name="paywall_terms_trial">Die ersten %1$d Tage kostenlos, danach %2$s. Kündige vor Ablauf der Testphase und es fallen keine Kosten an.</string>
+    <string name="paywall_terms_plain">%1$s — jederzeit kündbar.</string>
+    <string name="plan_per_month">Nur %1$s / Monat</string>
+    <string name="plan_cancel_any_time">Jederzeit kündbar</string>
+    <string name="plan_savings_badge">%1$d%% Rabatt</string>
+    <string name="trial_days_free">%1$d Tage gratis</string>
+    <string name="trial_weeks_free">%1$d Wochen gratis</string>
+
+    <string name="label_connector">Stecker</string>
+</resources>

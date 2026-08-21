@@ -1,0 +1,35 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic==2.9.2
+pydantic-settings==2.5.2
+
+# LLM: YALNIZCA Voice Co-pilot kullanir (tek adimli, dogrudan LangChain
+# cagrisi). Fiyat toplama hatti ARTIK LLM KULLANMAZ; gerekcesi icin
+# services/tariff_pipeline.py modul docstring'ine bakin.
+#
+# langchain-openai, Groq/Gemini gibi OpenAI-uyumlu uclar icin gerekli.
+# Daha once crewai uzerinden TRANSITIF geliyordu; crewai kaldirildigi icin
+# artik ACIKCA bildiriliyor (aksi halde voice yolu sessizce kirilirdi).
+langchain-core==0.2.43
+langchain-openai==0.1.25
+langchain-anthropic==0.1.23
+
+asyncpg==0.29.0
+redis[hiredis]==5.0.8
+# FastAPI dosya yukleme (UploadFile) icin ZORUNLU -- yoksa
+# /v1/voice/transcribe acilista "python-multipart gerekli" hatasi verir.
+python-multipart==0.0.12
+httpx==0.27.2
+python-dotenv==1.0.1
+tenacity>=8.1.0
+
+# ---------------------------------------------------------------------
+# KALDIRILANLAR ve nedenleri
+# ---------------------------------------------------------------------
+# crewai / crewai-tools : Fiyat hatti deterministik koda cevrildi, ReAct
+#     dongusu kaldirildi. Bu ikisi beraberinde chromadb + embedchain +
+#     litellm zincirini getiriyordu; chroma-hnswlib bir C++ eklentisi
+#     oldugu icin imajda g++ gerektiriyor ve build'i belirgin uzatiyordu.
+# langchain (meta paket) : Kod yalnizca langchain_core kullaniyor.
+# setuptools<81 : Yalnizca crewai telemetrisinin pkg_resources import'u
+#     icin eklenmisti; crewai gidince gereksiz.

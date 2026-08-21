@@ -1,0 +1,41 @@
+/* ios/EvaApp/Resources/es.lproj/Localizable.strings */
+
+"app.title" = "Eva AI";
+
+"range.warning.title" = "Autonomía insuficiente";
+"range.warning.body" = "Tu batería no alcanza para esta ruta. Se necesita una parada de carga cerca de %@.";
+
+"charge.stop.added" = "Parada de carga añadida: %@ (%.0f kW)";
+
+"manifest.unavailable.offline" = "Aún no hay datos de carga sin conexión para esta zona. Se actualizará en tu próxima conexión.";
+
+"battery.soc" = "%.0f%% cargada";
+"battery.estimated.arrival" = "Llegada estimada: %.0f%%";
+
+"connector.ccs" = "CCS";
+"connector.chademo" = "CHAdeMO";
+"connector.tesla" = "Tesla (NACS)";
+"connector.type2" = "Tipo 2";
+
+"subscription.trial.active.zero" = "Prueba gratuita — termina hoy";
+"subscription.trial.active.one" = "Prueba gratuita — queda 1 día";
+"subscription.trial.active.other" = "Prueba gratuita — quedan %d días";
+
+"subscription.price.monthly" = "%@ / mes";
+"subscription.price.yearly" = "%@ / año";
+
+"distance.km" = "%.0f km";
+"distance.mi" = "%.0f mi";
+
+"stations.find.nearby" = "Buscar estaciones de carga cercanas";
+"agent.price.updating" = "Comprobando precios en directo…";
+"purchase.restore" = "Restaurar compras";
+"purchase.cancelled" = "Compra cancelada.";
+"purchase.verification.failed" = "No pudimos verificar esta compra. Inténtalo de nuevo.";
+
+"onboarding.welcome.title" = "Bienvenido a Eva";
+"onboarding.welcome.subtitle" = "Tu compañero de carga de VE centrado en la privacidad";
+"settings.language" = "Idioma";
+"settings.units" = "Unidades";
+"settings.units.metric" = "Kilómetros";
+"settings.units.imperial" = "Millas";

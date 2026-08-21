@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 260" role="img" aria-label="Spor araç">
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#f2f6f9"/>
+      <stop offset="38%"  stop-color="#c7d3dc"/>
+      <stop offset="62%"  stop-color="#8fa3b3"/>
+      <stop offset="100%" stop-color="#5b6b7a"/>
+    </linearGradient>
+
+    <linearGradient id="bodyLower" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#6d7f8e"/>
+      <stop offset="100%" stop-color="#2b3742"/>
+    </linearGradient>
+
+    <linearGradient id="glass" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0%"   stop-color="#8fe9ff" stop-opacity="0.95"/>
+      <stop offset="55%"  stop-color="#2b6a86" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#12303f" stop-opacity="0.95"/>
+    </linearGradient>
+
+    <linearGradient id="wheel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#3a4650"/>
+      <stop offset="100%" stop-color="#161c22"/>
+    </linearGradient>
+
+    <radialGradient id="rim" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%"   stop-color="#dfe8ee"/>
+      <stop offset="70%"  stop-color="#93a4b1"/>
+      <stop offset="100%" stop-color="#4a5661"/>
+    </radialGradient>
+
+    <linearGradient id="headlight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#00e5ff"/>
+    </linearGradient>
+
+    <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Zemin yansimasi -->
+  <ellipse cx="320" cy="228" rx="238" ry="17" fill="#00e5ff" opacity="0.16"/>
+
+  <!-- Alt govde / marspiyel -->
+  <path d="M78 176 C120 196 210 202 320 202 C430 202 520 196 562 176
+           L556 156 L84 156 Z"
+        fill="url(#bodyLower)"/>
+
+  <!-- Ana govde: alcak, uzun kaportali spor siluet -->
+  <path d="M60 162
+           C64 132 96 120 138 114
+           C168 86 214 66 274 62
+           C344 57 402 70 446 96
+           C494 104 546 118 574 136
+           C588 145 590 158 584 168
+           C560 178 498 184 420 187
+           C360 189 280 189 220 187
+           C150 184 92 178 68 172
+           Z"
+        fill="url(#body)"/>
+
+  <!-- Camlar -->
+  <path d="M186 112
+           C214 88 254 76 300 74
+           C346 72 388 82 420 100
+           L404 112
+           C368 100 330 94 292 96
+           C254 98 216 104 186 112 Z"
+        fill="url(#glass)"/>
+
+  <!-- Yan cam cizgisi -->
+  <path d="M196 116 C240 100 300 92 366 100" fill="none"
+        stroke="#e9f4fa" stroke-opacity="0.45" stroke-width="2"/>
+
+  <!-- Kaporta karakter cizgisi -->
+  <path d="M96 150 C180 140 300 136 420 142 C480 145 530 152 566 160"
+        fill="none" stroke="#ffffff" stroke-opacity="0.32" stroke-width="2.5"/>
+
+  <!-- On far -->
+  <path d="M566 140 C580 142 588 149 586 158 L556 154 Z"
+        fill="url(#headlight)" filter="url(#softGlow)"/>
+
+  <!-- Arka stop -->
+  <path d="M62 150 L92 154 L90 164 L62 160 Z"
+        fill="#ff1744" opacity="0.9" filter="url(#softGlow)"/>
+
+  <!-- Hava girisi -->
+  <path d="M486 168 L556 172 L554 180 L488 176 Z" fill="#1b242c" opacity="0.75"/>
+
+  <!-- Tekerlekler -->
+  <g>
+    <circle cx="176" cy="180" r="44" fill="url(#wheel)"/>
+    <circle cx="176" cy="180" r="26" fill="url(#rim)"/>
+    <circle cx="176" cy="180" r="9"  fill="#2a333c"/>
+    <g stroke="#5d6b77" stroke-width="3">
+      <line x1="176" y1="156" x2="176" y2="204"/>
+      <line x1="152" y1="180" x2="200" y2="180"/>
+      <line x1="159" y1="163" x2="193" y2="197"/>
+      <line x1="193" y1="163" x2="159" y2="197"/>
+    </g>
+  </g>
+
+  <g>
+    <circle cx="462" cy="180" r="44" fill="url(#wheel)"/>
+    <circle cx="462" cy="180" r="26" fill="url(#rim)"/>
+    <circle cx="462" cy="180" r="9"  fill="#2a333c"/>
+    <g stroke="#5d6b77" stroke-width="3">
+      <line x1="462" y1="156" x2="462" y2="204"/>
+      <line x1="438" y1="180" x2="486" y2="180"/>
+      <line x1="445" y1="163" x2="479" y2="197"/>
+      <line x1="479" y1="163" x2="445" y2="197"/>
+    </g>
+  </g>
+
+  <!-- Tekerlek davlumbazlari -->
+  <path d="M124 176 C126 148 148 130 176 130 C204 130 226 148 228 176"
+        fill="none" stroke="#485764" stroke-width="4"/>
+  <path d="M410 176 C412 148 434 130 462 130 C490 130 512 148 514 176"
+        fill="none" stroke="#485764" stroke-width="4"/>
+
+  <!-- Alt neon vurgu -->
+  <path d="M110 196 C200 210 440 210 530 196" fill="none"
+        stroke="#00e5ff" stroke-width="3" opacity="0.55" filter="url(#softGlow)"/>
+</svg>

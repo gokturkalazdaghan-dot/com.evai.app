@@ -1,0 +1,165 @@
+# docker-compose.yml
+# Eva Platform — tek komutla yerel geliştirme ortamı.
+# Kullanım: docker compose up -d --build
+# Durdurma: docker compose down
+# Verileri de silmek için: docker compose down -v
+
+services:
+
+  # ------------------------------------------------------------
+  # PostgreSQL + PostGIS
+  # ------------------------------------------------------------
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: eva-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: eva_dev_password
+      POSTGRES_DB: eva_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - eva_postgres_data:/var/lib/postgresql/data
+      # schema.sql, container ilk oluşturulduğunda /docker-entrypoint-initdb.d
+      # altındaki dosyaları alfabetik sırayla otomatik çalıştırır — bu
+      # sayede `docker compose up` sonrası şema manuel yüklemeye gerek kalmaz.
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d eva_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - eva-network
+
+  # ------------------------------------------------------------
+  # Redis
+  # ------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: eva-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - eva_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - eva-network
+
+  # ------------------------------------------------------------
+  # NestJS Gateway
+  # ------------------------------------------------------------
+  gateway:
+    build:
+      context: ./backend/nestjs-gateway
+      dockerfile: Dockerfile
+    container_name: eva-gateway
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:eva_dev_password@postgres:5432/eva_dev
+      REDIS_URL: redis://redis:6379
+      DEVICE_ATTESTATION_ENFORCED: "false"
+      ADMIN_API_KEY: ${ADMIN_API_KEY:-dev_only_admin_key_minimum_32_characters_xx}
+      APPLE_APP_BUNDLE_ID: com.eva.app
+      ANDROID_PACKAGE_NAME: com.eva.app
+      REVENUECAT_WEBHOOK_AUTH_SECRET: ${REVENUECAT_WEBHOOK_AUTH_SECRET:-dev_only_revenuecat_secret_min24}
+      # Web yuzeyi aboneligi icin; tanimsizsa Stripe ucu KAPALI kalir
+      # (yapilandirilmamis bir odeme webhook'unu acik birakmak,
+      # herkesin kendine abonelik yazabilmesi demektir).
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      PRICE_AGENT_SERVICE_URL: http://price-saving-agent:8000
+      INTERNAL_SERVICE_MASTER_SECRET: ${INTERNAL_SERVICE_MASTER_SECRET:-dev_only_internal_secret_min_32_characters_xx}
+      ADMIN_IP_ALLOWLIST: ""
+      CORS_ALLOWED_ORIGINS: "*"
+    ports:
+      - "3000:3000"
+    networks:
+      - eva-network
+
+  # ------------------------------------------------------------
+  # Python — Fiyat Tasarruf Ajanı (FastAPI + CrewAI)
+  # ------------------------------------------------------------
+  price-saving-agent:
+    build:
+      context: ./backend/ai-services/price_saving_agent
+      dockerfile: Dockerfile
+    container_name: eva-price-agent
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      POSTGRES_DSN: postgresql://postgres:eva_dev_password@postgres:5432/eva_dev
+      REDIS_URL: redis://redis:6379
+      # --- LLM saglayici secimi -------------------------------------
+      # LLM yalnizca Voice Co-pilot tarafindan kullanilir; fiyat toplama
+      # hatti deterministiktir (bkz. services/tariff_pipeline.py).
+      # Gecerli degerler: anthropic | groq | gemini | openai_compatible
+      VOICE_LLM_PROVIDER: ${VOICE_LLM_PROVIDER:-anthropic}
+      # Model adlari saglayici ONEKI OLMADAN yazilir; onek llm_factory ekler.
+      VOICE_AGENT_MODEL_NAME: ${VOICE_AGENT_MODEL_NAME:-claude-sonnet-4-6}
+      # Anahtarlar: YALNIZCA secilen saglayicininki zorunlu (config.py
+      # icindeki dogrulayici acilista kontrol eder). Bu yuzden burada
+      # hicbiri ":?" ile zorunlu tutulmuyor.
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      OPENAI_COMPATIBLE_API_KEY: ${OPENAI_COMPATIBLE_API_KEY:-}
+      OPENAI_COMPATIBLE_BASE_URL: ${OPENAI_COMPATIBLE_BASE_URL:-}
+      VOICE_AGENT_MAX_RESPONSE_CHARS: "280"
+      INTERNAL_SERVICE_MASTER_SECRET: ${INTERNAL_SERVICE_MASTER_SECRET:-dev_only_internal_secret_min_32_characters_xx}
+      # Varsayılan değer, mock-cpo-aggregator servisinin container adını
+      # hedefler — `docker compose --profile mock up` ile birlikte
+      # çalıştırıldığında ekstra yapılandırma gerekmeden çalışır. Gerçek
+      # bir CPO Aggregator sözleşmeniz varsa .env dosyanızda
+      # OCPI_AGGREGATOR_BASE_URL'i gerçek adresle geçersiz kılın.
+      OCPI_AGGREGATOR_BASE_URL: ${OCPI_AGGREGATOR_BASE_URL:-http://mock-cpo-aggregator:9999}
+      OPENCHARGEMAP_API_KEY: ${OPENCHARGEMAP_API_KEY:-}
+      OCPI_AGGREGATOR_API_KEY: ${OCPI_AGGREGATOR_API_KEY:-dev_placeholder}
+    ports:
+      - "8000:8000"
+    networks:
+      - eva-network
+
+  # ------------------------------------------------------------
+  # Mock CPO Aggregator — YALNIZCA yerel geliştirme/CI için.
+  # Gerçek CPO Aggregator sözleşmesi tamamlanana kadar
+  # OCPI_AGGREGATOR_BASE_URL bu servise işaret eder. "mock" profile'ı
+  # altında olduğu için varsayılan `docker compose up` bunu BAŞLATMAZ —
+  # açıkça `docker compose --profile mock up -d --build` çalıştırılmalı.
+  # Bu, gerçek sözleşme sonrası birinin yanlışlıkla mock veriye karşı
+  # production benzeri bir test yapmasını önlemesi içindir.
+  mock-cpo-aggregator:
+    profiles: ["mock"]
+    build:
+      context: ./backend/ai-services/mock_cpo_aggregator
+      dockerfile: Dockerfile
+    container_name: eva-mock-cpo
+    restart: unless-stopped
+    ports:
+      - "9999:9999"
+    networks:
+      - eva-network
+
+networks:
+  eva-network:
+    driver: bridge
+
+volumes:
+  eva_postgres_data:
+  eva_redis_data:

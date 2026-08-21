@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- android/app/src/main/res/values-tr/strings.xml (Türkçe) -->
+<resources>
+    <string name="app_name">Eva AI</string>
+
+    <string name="range_warning_title">Menzil Yetersiz</string>
+    <string name="range_warning_body">Bataryanız bu rotayı kaldırmıyor. %1$s yakınında bir şarj molası gerekiyor.</string>
+
+    <string name="charge_stop_added">Şarj molası eklendi: %1$s (%2$.0f kW)</string>
+
+    <string name="manifest_unavailable_offline">Bu bölge için henüz çevrimdışı şarj verisi yok. Bir sonraki bağlantınızda güncellenecek.</string>
+
+    <string name="battery_soc">%%%1$.0f dolu</string>
+    <string name="battery_estimated_arrival">Tahmini varış: %%%1$.0f</string>
+
+    <string name="connector_ccs">CCS</string>
+    <string name="connector_chademo">CHAdeMO</string>
+    <string name="connector_tesla">Tesla (NACS)</string>
+    <string name="connector_type2">Type 2</string>
+
+    <plurals name="subscription_trial_active">
+        <item quantity="other">Ücretsiz deneme — %d gün kaldı</item>
+    </plurals>
+
+    <string name="subscription_price_monthly">Aylık %1$s</string>
+    <string name="subscription_price_yearly">Yıllık %1$s</string>
+
+    <string name="distance_km">%1$.0f km</string>
+    <string name="distance_mi">%1$.0f mi</string>
+
+    <string name="stations_find_nearby">Yakındaki şarj istasyonlarını bul</string>
+    <string name="agent_price_updating">Anlık fiyatlar kontrol ediliyor…</string>
+    <string name="purchase_restore">Satın alımları geri yükle</string>
+    <string name="purchase_cancelled">Satın alma iptal edildi.</string>
+    <string name="purchase_verification_failed">Bu satın almayı doğrulayamadık. Lütfen tekrar deneyin.</string>
+
+    <string name="onboarding_welcome_title">Eva\’ya Hoş Geldiniz</string>
+    <string name="onboarding_welcome_subtitle">Gizliliğe öncelik veren EV şarj yardımcınız</string>
+    <string name="settings_language">Dil</string>
+    <string name="settings_units">Birim</string>
+    <string name="settings_units_metric">Kilometre</string>
+    <string name="settings_units_imperial">Mil</string>
+
+    <string name="stations_screen_title">Yakındaki Şarj İstasyonları</string>
+    <string name="stations_empty_message">Bu bölgede uygun istasyon bulunamadı.</string>
+    <string name="stations_retry">Tekrar Dene</string>
+
+    <!-- Panel / asistan metinleri -->
+    <string name="dashboard_title">Şarj İstasyonu Bul</string>
+    <string name="dashboard_near">%1$s yakınında</string>
+    <string name="dashboard_filter">Filtrele</string>
+    <string name="battery_health">Batarya Sağlığı</string>
+    <string name="battery_health_excellent">Mükemmel</string>
+    <string name="battery_health_good">İyi</string>
+    <string name="battery_health_fair">Orta</string>
+    <string name="cheapest_nearby">En Ucuz Yakında</string>
+    <string name="cheapest_waiting_price">Fiyat bekleniyor</string>
+    <string name="distance_away">%1$s uzaklıkta</string>
+    <string name="current_charge">Mevcut Şarj</string>
+    <string name="range_calculating">Menzil hesaplanıyor</string>
+    <string name="nearby_stations">Yakındaki istasyonlar</string>
+    <string name="stations_searching">İstasyonlar aranıyor…</string>
+    <string name="stations_none_for_vehicle">Bu bölgede aracına uygun istasyon bulunamadı.</string>
+    <string name="assistant_ask">Eva’ya sor</string>
+    <string name="assistant_type">Metinle yaz</string>
+    <string name="assistant_send">Gönder</string>
+    <string name="assistant_cancel">Vazgeç</string>
+    <string name="battery_health_attention">Dikkat</string>
+
+    <string name="battery_alert_channel_name">Batarya uyarıları</string>
+    <string name="battery_alert_channel_description">Şarjın düştüğünde ve mola planlamak gerektiğinde seni uyarır.</string>
+    <string name="battery_alert_low_title">Batarya azalıyor</string>
+    <string name="battery_alert_critical_title">Şarj kritik seviyede</string>
+
+    <string name="navigation_start">Yol tarifi al</string>
+    <string name="navigation_no_maps_app">Bu cihazda harita uygulaması bulunamadı.</string>
+
+    <string name="vehicle_turntable_description">Aracın döner tabla üzerinde. Döndürmek için sağa veya sola kaydır.</string>
+
+    <string name="tab_dashboard">Panel</string>
+    <string name="tab_stations">İstasyonlar</string>
+    <string name="tab_vehicle">Aracım</string>
+    <string name="tab_premium">Premium</string>
+    <string name="location_resolving">Konumun alınıyor…</string>
+    <string name="location_needed_title">Yakınındaki istasyonları görmek için konum gerekli</string>
+    <string name="location_needed_body">Hangi istasyonun sana yakın ve ucuz olduğunu ancak nerede olduğunu bilirsek söyleyebiliriz. Konumun cihazından çıkmaz, yalnızca yakındaki istasyonları sorgulamak için kullanılır.</string>
+    <string name="location_unavailable_title">Konumun alınamadı</string>
+    <string name="location_unavailable_body">Kapalı alanda ya da sinyalin zayıf olduğu bir yerde olabilirsin. Açık havaya çıkıp tekrar deneyebilirsin.</string>
+    <string name="action_grant_location">Konum iznini ver</string>
+    <string name="action_retry">Tekrar dene</string>
+    <string name="action_open_settings">Ayarları aç</string>
+    <string name="settings_permission_path">Ayarlar → İzinler → Konum</string>
+    <string name="feedback_prompt">Bir sorun mu var, bir fikrin mi?</string>
+    <string name="feedback_send">Geri bildirim gönder</string>
+    <string name="feedback_copied">E-posta uygulaması bulunamadı. Mesaj panoya kopyalandı.</string>
+    <string name="offline_prices">Çevrimdışısın — %1$s fiyatlar</string>
+    <string name="action_refresh">Yenile</string>
+    <string name="age_just_now">az önceki</string>
+    <string name="age_minutes">%1$d dakika önceki</string>
+    <string name="age_hours">%1$d saat önceki</string>
+    <string name="age_yesterday">dünkü</string>
+    <string name="age_days">%1$d gün önceki</string>
+
+    <string name="stations_title">Yakındaki Şarj İstasyonları</string>
+    <string name="station_not_found">İstasyon bilgisi bulunamadı.</string>
+    <string name="action_back_to_list">Listeye dön</string>
+    <string name="label_max_power">Maksimum güç</string>
+    <string name="label_operator">İşletmeci</string>
+    <string name="filter_min_power">En düşük güç</string>
+    <string name="filter_radius">Arama yarıçapı</string>
+    <string name="filter_price_known">Sadece fiyatı bilinenler</string>
+    <string name="action_reset">Sıfırla</string>
+    <string name="vehicle_title">Aracım</string>
+    <string name="vehicle_brand_hint">örn. Tesla</string>
+    <string name="vehicle_model_hint">örn. Model 3</string>
+    <string name="vehicle_charge_state">Şarj durumu</string>
+    <string name="vehicle_current_charge">Mevcut şarj</string>
+    <string name="onboarding_title">Aracını tanıyalım</string>
+    <string name="onboarding_brand">Marka (örn. Tesla)</string>
+    <string name="onboarding_model">Model (örn. Model 3)</string>
+    <string name="onboarding_charge">Şu anki şarj (%)</string>
+    <string name="onboarding_start">Yola çıkalım</string>
+    <string name="telemetry_from_car">Araçtan canlı</string>
+    <string name="telemetry_from_obd">OBD cihazından canlı</string>
+    <string name="telemetry_from_cloud">Üretici hesabından canlı</string>
+    <string name="telemetry_interrupted">Bağlantı kesildi</string>
+    <string name="telemetry_manual">Elle girilen değer</string>
+    <string name="telemetry_manual_hint">Otomatik okuma için bir OBD Bluetooth cihazı bağlayabilirsin.</string>
+    <string name="telemetry_waiting">Veri bekleniyor</string>
+    <string name="telemetry_waiting_hint">Bağlantı kurulu ama şu an okuma gelmiyor.</string>
+    <string name="plan_monthly">Aylık</string>
+    <string name="plan_annual">Yıllık</string>
+    <string name="action_restore_purchases">Satın alımları geri yükle</string>
+    <string name="subscription_unavailable">Abonelikler şu anda kullanılamıyor</string>
+
+    <string name="paywall_tagline">Daha akıllı şarj, daha az maliyet.</string>
+    <string name="benefit_live_prices">Tüm şarj ağlarında canlı fiyat</string>
+    <string name="benefit_price_alerts">Fiyat düşüş uyarıları</string>
+    <string name="benefit_route_planning">Rota ve menzil planlama</string>
+    <string name="benefit_no_ads">Reklamsız deneyim</string>
+    <string name="paywall_cta_trial">%1$d gün ücretsiz dene</string>
+    <string name="paywall_cta_subscribe">Hemen Premium’a geç</string>
+    <string name="paywall_terms_trial">İlk %1$d gün ücretsiz, sonrasında %2$s. Deneme bitmeden iptal edersen ücret alınmaz.</string>
+    <string name="paywall_terms_plain">%1$s — istediğin zaman iptal edebilirsin.</string>
+    <string name="plan_per_month">Sadece %1$s / ay</string>
+    <string name="plan_cancel_any_time">İstediğin zaman iptal et</string>
+    <string name="plan_savings_badge">%%%1$d indirim</string>
+    <string name="trial_days_free">%1$d gün ücretsiz</string>
+    <string name="trial_weeks_free">%1$d hafta ücretsiz</string>
+
+    <string name="label_connector">Soket</string>
+</resources>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- android/app/src/main/res/values/strings.xml (English - default) -->
+<resources>
+    <string name="app_name">Eva AI</string>
+
+    <string name="range_warning_title">Insufficient Range</string>
+    <string name="range_warning_body">Your battery won\’t cover this route. A charging stop is required near %1$s.</string>
+
+    <string name="charge_stop_added">Charging stop added: %1$s (%2$.0f kW)</string>
+
+    <string name="manifest_unavailable_offline">No offline charging data for this area yet. It will update on your next connection.</string>
+
+    <string name="battery_soc">%1$.0f%% charged</string>
+    <string name="battery_estimated_arrival">Estimated arrival: %1$.0f%%</string>
+
+    <string name="connector_ccs">CCS</string>
+    <string name="connector_chademo">CHAdeMO</string>
+    <string name="connector_tesla">Tesla (NACS)</string>
+    <string name="connector_type2">Type 2</string>
+
+    <plurals name="subscription_trial_active">
+        <item quantity="one">Free trial — 1 day left</item>
+        <item quantity="other">Free trial — %d days left</item>
+    </plurals>
+
+    <string name="subscription_price_monthly">%1$s / month</string>
+    <string name="subscription_price_yearly">%1$s / year</string>
+
+    <string name="distance_km">%1$.0f km</string>
+    <string name="distance_mi">%1$.0f mi</string>
+
+    <string name="stations_find_nearby">Find charging stations nearby</string>
+    <string name="agent_price_updating">Checking live prices…</string>
+    <string name="purchase_restore">Restore purchases</string>
+    <string name="purchase_cancelled">Purchase cancelled.</string>
+    <string name="purchase_verification_failed">We couldn\’t verify this purchase. Please try again.</string>
+
+    <string name="onboarding_welcome_title">Welcome to Eva</string>
+    <string name="onboarding_welcome_subtitle">Your privacy-first EV charging companion</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_units">Units</string>
+    <string name="settings_units_metric">Kilometers</string>
+    <string name="settings_units_imperial">Miles</string>
+
+    <string name="stations_screen_title">Nearby Charging Stations</string>
+    <string name="stations_empty_message">No suitable stations found in this area.</string>
+    <string name="stations_retry">Retry</string>
+
+    <!-- Panel / asistan metinleri -->
+    <string name="dashboard_title">Find Chargers</string>
+    <string name="dashboard_near">Near %1$s</string>
+    <string name="dashboard_filter">Filter</string>
+    <string name="battery_health">Battery Health</string>
+    <string name="battery_health_excellent">Excellent</string>
+    <string name="battery_health_good">Good</string>
+    <string name="battery_health_fair">Fair</string>
+    <string name="cheapest_nearby">Cheapest Nearby</string>
+    <string name="cheapest_waiting_price">Waiting for price</string>
+    <string name="distance_away">%1$s away</string>
+    <string name="current_charge">Current Charge</string>
+    <string name="range_calculating">Calculating range</string>
+    <string name="nearby_stations">Nearby stations</string>
+    <string name="stations_searching">Searching for stations…</string>
+    <string name="stations_none_for_vehicle">No stations compatible with your car in this area.</string>
+    <string name="assistant_ask">Ask Eva</string>
+    <string name="assistant_type">Type instead</string>
+    <string name="assistant_send">Send</string>
+    <string name="assistant_cancel">Cancel</string>
+    <string name="battery_health_attention">Attention</string>
+
+    <string name="battery_alert_channel_name">Battery alerts</string>
+    <string name="battery_alert_channel_description">Warns you when your charge drops and a stop is worth planning.</string>
+    <string name="battery_alert_low_title">Battery running low</string>
+    <string name="battery_alert_critical_title">Charge critically low</string>
+
+    <string name="navigation_start">Get directions</string>
+    <string name="navigation_no_maps_app">No maps app found on this device.</string>
+
+    <string name="vehicle_turntable_description">Your vehicle, shown on a turntable. Swipe left or right to rotate it.</string>
+
+    <string name="tab_dashboard">Dashboard</string>
+    <string name="tab_stations">Stations</string>
+    <string name="tab_vehicle">My car</string>
+    <string name="tab_premium">Premium</string>
+    <string name="location_resolving">Getting your location…</string>
+    <string name="location_needed_title">Location needed to find nearby stations</string>
+    <string name="location_needed_body">We can only tell you which station is close and cheap if we know where you are. Your location stays on your device and is used only to look up nearby stations.</string>
+    <string name="location_unavailable_title">Could not get your location</string>
+    <string name="location_unavailable_body">You may be indoors or somewhere with a weak signal. Try again outside.</string>
+    <string name="action_grant_location">Grant location access</string>
+    <string name="action_retry">Try again</string>
+    <string name="action_open_settings">Open settings</string>
+    <string name="settings_permission_path">Settings → Permissions → Location</string>
+    <string name="feedback_prompt">Something wrong, or an idea?</string>
+    <string name="feedback_send">Send feedback</string>
+    <string name="feedback_copied">No email app found. The message was copied to your clipboard.</string>
+    <string name="offline_prices">You’re offline — prices from %1$s</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="age_just_now">just now</string>
+    <string name="age_minutes">%1$d min old</string>
+    <string name="age_hours">%1$d h old</string>
+    <string name="age_yesterday">from yesterday</string>
+    <string name="age_days">%1$d days old</string>
+
+    <string name="stations_title">Charging stations nearby</string>
+    <string name="station_not_found">Station details not available.</string>
+    <string name="action_back_to_list">Back to list</string>
+    <string name="label_max_power">Max power</string>
+    <string name="label_operator">Operator</string>
+    <string name="filter_min_power">Minimum power</string>
+    <string name="filter_radius">Search radius</string>
+    <string name="filter_price_known">Only stations with a known price</string>
+    <string name="action_reset">Reset</string>
+    <string name="vehicle_title">My car</string>
+    <string name="vehicle_brand_hint">e.g. Tesla</string>
+    <string name="vehicle_model_hint">e.g. Model 3</string>
+    <string name="vehicle_charge_state">Charge status</string>
+    <string name="vehicle_current_charge">Current charge</string>
+    <string name="onboarding_title">Let’s set up your car</string>
+    <string name="onboarding_brand">Brand (e.g. Tesla)</string>
+    <string name="onboarding_model">Model (e.g. Model 3)</string>
+    <string name="onboarding_charge">Current charge (%)</string>
+    <string name="onboarding_start">Let’s go</string>
+    <string name="telemetry_from_car">Live from your car</string>
+    <string name="telemetry_from_obd">Live from OBD adapter</string>
+    <string name="telemetry_from_cloud">Live from your carmaker account</string>
+    <string name="telemetry_interrupted">Connection lost</string>
+    <string name="telemetry_manual">Entered by you</string>
+    <string name="telemetry_manual_hint">Connect an OBD Bluetooth adapter for automatic readings.</string>
+    <string name="telemetry_waiting">Waiting for data</string>
+    <string name="telemetry_waiting_hint">Connected, but no readings are coming through right now.</string>
+    <string name="plan_monthly">Monthly</string>
+    <string name="plan_annual">Annual</string>
+    <string name="action_restore_purchases">Restore purchases</string>
+    <string name="subscription_unavailable">Subscriptions are unavailable right now</string>
+
+    <string name="paywall_tagline">Smarter charging, lower cost.</string>
+    <string name="benefit_live_prices">Live prices across every charging network</string>
+    <string name="benefit_price_alerts">Alerts when prices drop</string>
+    <string name="benefit_route_planning">Route and range planning</string>
+    <string name="benefit_no_ads">No ads</string>
+    <string name="paywall_cta_trial">Try %1$d days free</string>
+    <string name="paywall_cta_subscribe">Go Premium</string>
+    <string name="paywall_terms_trial">First %1$d days free, then %2$s. Cancel before the trial ends and you won’t be charged.</string>
+    <string name="paywall_terms_plain">%1$s — cancel any time.</string>
+    <string name="plan_per_month">Only %1$s / month</string>
+    <string name="plan_cancel_any_time">Cancel any time</string>
+    <string name="plan_savings_badge">%1$d%% off</string>
+    <string name="trial_days_free">%1$d days free</string>
+    <string name="trial_weeks_free">%1$d weeks free</string>
+
+    <string name="label_connector">Connector</string>
+</resources>

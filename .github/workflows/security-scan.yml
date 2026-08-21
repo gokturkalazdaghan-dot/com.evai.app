@@ -1,0 +1,39 @@
+# .github/workflows/security-scan.yml
+name: Security Scan
+
+on:
+  pull_request:
+  schedule:
+    # Bağımlılık taramaları haftalık — yalnızca PR anında değil, yeni
+    # CVE'ler yayınlandıkça da tespit edilebilsin.
+    - cron: '0 3 * * 1'
+
+jobs:
+  dependency-scan:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target:
+          - { path: 'backend/nestjs-gateway', ecosystem: 'npm' }
+          - { path: 'backend/ai-services/price_saving_agent', ecosystem: 'pip' }
+          - { path: 'android', ecosystem: 'gradle' }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scan-ref: ${{ matrix.target.path }}
+          severity: CRITICAL,HIGH
+          exit-code: '1'
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Gitleaks scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  android/app/src/main/res/values/ic_launcher_background.xml
+  Launcher ikonunun arka plan rengi (adaptive icon katmani).
+-->
+<resources>
+    <color name="ic_launcher_background">#0F9D58</color>
+</resources>

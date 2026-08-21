@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EVA AI — Real-Time Vehicle Telemetry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap">
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+
+<div class="hud">
+
+  <header class="hud-title">
+    <span class="corner tl"></span><span class="corner tr"></span>
+    <h1>EVA AI — REAL-TIME VEHICLE TELEMETRY</h1>
+  </header>
+
+  <main class="grid">
+
+    <!-- ================= SOL UST: BATARYA ================= -->
+    <section class="panel panel--battery">
+      <h2 class="panel-label">BATTERY STATUS</h2>
+
+      <div class="battery-row">
+        <div class="ring-wrap">
+          <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+            <defs>
+              <linearGradient id="ringGrad" x1="0" y1="1" x2="1" y2="0">
+                <stop offset="0%" stop-color="#39ff14"/>
+                <stop offset="55%" stop-color="#00e5ff"/>
+                <stop offset="100%" stop-color="#7c4dff"/>
+              </linearGradient>
+            </defs>
+            <circle class="ring-track" cx="60" cy="60" r="50"/>
+            <circle class="ring-value" id="batteryRing" cx="60" cy="60" r="50"/>
+          </svg>
+          <div class="ring-center">
+            <span class="ring-value-text" id="batteryPercent">—</span>
+          </div>
+        </div>
+
+        <dl class="readouts">
+          <div><dt>RANGE</dt><dd id="range">—</dd></div>
+          <div><dt>VOLTAGE</dt><dd id="voltage">—</dd></div>
+        </dl>
+      </div>
+
+      <!-- Son okumalarin kucuk cubuk gecmisi -->
+      <div class="sparkbars" id="sparkbars" aria-hidden="true"></div>
+    </section>
+
+    <!-- ================= ORTA: ARAC ================= -->
+    <section class="panel panel--stage">
+      <div class="stage">
+        <div class="stage-rings">
+          <span class="stage-ring r1"></span>
+          <span class="stage-ring r2"></span>
+          <span class="stage-ring r3"></span>
+        </div>
+        <!-- 360 derece donen arac -->
+        <div class="car-orbit" id="carOrbit">
+          <img src="./car.svg" alt="Araç" class="car" id="carImage">
+        </div>
+        <div class="stage-glow"></div>
+      </div>
+    </section>
+
+    <!-- ================= SAG UST: SARJ ================= -->
+    <section class="panel panel--charging">
+      <h2 class="panel-label">CHARGING DATA</h2>
+      <dl class="readouts readouts--stacked">
+        <div><dt>STATUS</dt><dd id="chargeStatus" class="status">—</dd></div>
+        <div><dt>EST. CHARGE TIME</dt><dd id="chargeTime">—</dd></div>
+        <div><dt>POWER FLOW</dt><dd id="powerFlow">—</dd></div>
+      </dl>
+    </section>
+
+    <!-- ================= SAG ALT: UYARILAR ================= -->
+    <section class="panel panel--alerts">
+      <h2 class="panel-label">SYSTEM ALERTS</h2>
+      <ul class="alerts" id="alerts">
+        <li class="alert alert--idle"><span class="dot"></span>Bağlantı bekleniyor</li>
+      </ul>
+    </section>
+
+    <!-- ================= SOL ALT: ARAC BILGISI ================= -->
+    <section class="panel panel--info">
+      <h2 class="panel-label">VEHICLE INFO</h2>
+      <dl class="readouts readouts--stacked">
+        <div><dt>SPEED</dt><dd id="speed">—</dd></div>
+        <div><dt>BATTERY</dt><dd id="batteryDup">—</dd></div>
+        <div><dt>ODOMETER</dt><dd id="odometer">—</dd></div>
+      </dl>
+    </section>
+
+  </main>
+
+  <footer class="hud-footer">
+    <span class="corner bl"></span><span class="corner br"></span>
+    <span>Connection: <b id="connectionState">Bağlanıyor…</b></span>
+    <span>Latency: <b id="latency">—</b></span>
+    <span>Last update: <b id="lastUpdate">—</b></span>
+  </footer>
+
+</div>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>

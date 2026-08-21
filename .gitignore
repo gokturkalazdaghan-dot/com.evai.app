@@ -1,0 +1,46 @@
+# .gitignore
+
+# Ortam değişkenleri
+.env
+*.env
+!.env.example
+!*.env.example
+
+# Node / NestJS
+node_modules/
+dist/
+coverage/
+npm-debug.log*
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+*.egg-info/
+
+# Android / Gradle
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+android/*.iml
+android/captures/
+android/.cxx/
+android/app/release/
+
+# iOS / Xcode
+ios/**/xcuserdata/
+ios/**/*.xcworkspace/xcuserdata/
+ios/**/DerivedData/
+ios/**/*.pbxuser
+ios/Pods/
+
+# Genel
+.DS_Store
+*.log
+android/local.properties
+
+# Eski dosya yedekleri (sir icerebilir)
+_archive/

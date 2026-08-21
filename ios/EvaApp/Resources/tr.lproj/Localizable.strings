@@ -1,0 +1,41 @@
+/* ios/EvaApp/Resources/tr.lproj/Localizable.strings */
+
+"app.title" = "Eva AI";
+
+"range.warning.title" = "Menzil Yetersiz";
+"range.warning.body" = "Bataryanız bu rotayı kaldırmıyor. %@ yakınında bir şarj molası gerekiyor.";
+
+"charge.stop.added" = "Şarj molası eklendi: %@ (%.0f kW)";
+
+"manifest.unavailable.offline" = "Bu bölge için henüz çevrimdışı şarj verisi yok. Bir sonraki bağlantınızda güncellenecek.";
+
+"battery.soc" = "%%%.0f dolu";
+"battery.estimated.arrival" = "Tahmini varış: %%%.0f";
+
+"connector.ccs" = "CCS";
+"connector.chademo" = "CHAdeMO";
+"connector.tesla" = "Tesla (NACS)";
+"connector.type2" = "Type 2";
+
+"subscription.trial.active.zero" = "Ücretsiz deneme — bugün bitiyor";
+"subscription.trial.active.one" = "Ücretsiz deneme — 1 gün kaldı";
+"subscription.trial.active.other" = "Ücretsiz deneme — %d gün kaldı";
+
+"subscription.price.monthly" = "Aylık %@";
+"subscription.price.yearly" = "Yıllık %@";
+
+"distance.km" = "%.0f km";
+"distance.mi" = "%.0f mi";
+
+"stations.find.nearby" = "Yakındaki şarj istasyonlarını bul";
+"agent.price.updating" = "Anlık fiyatlar kontrol ediliyor…";
+"purchase.restore" = "Satın alımları geri yükle";
+"purchase.cancelled" = "Satın alma iptal edildi.";
+"purchase.verification.failed" = "Bu satın almayı doğrulayamadık. Lütfen tekrar deneyin.";
+
+"onboarding.welcome.title" = "Eva'ya Hoş Geldiniz";
+"onboarding.welcome.subtitle" = "Gizliliğe öncelik veren EV şarj yardımcınız";
+"settings.language" = "Dil";
+"settings.units" = "Birim";
+"settings.units.metric" = "Kilometre";
+"settings.units.imperial" = "Mil";

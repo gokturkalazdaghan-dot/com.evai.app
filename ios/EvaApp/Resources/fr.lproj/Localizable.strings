@@ -1,0 +1,41 @@
+/* ios/EvaApp/Resources/fr.lproj/Localizable.strings */
+
+"app.title" = "Eva AI";
+
+"range.warning.title" = "Autonomie insuffisante";
+"range.warning.body" = "Votre batterie ne permet pas de parcourir cet itinéraire. Un arrêt de recharge est nécessaire près de %@.";
+
+"charge.stop.added" = "Arrêt de recharge ajouté : %@ (%.0f kW)";
+
+"manifest.unavailable.offline" = "Aucune donnée de recharge hors ligne pour cette zone pour le moment. Mise à jour lors de votre prochaine connexion.";
+
+"battery.soc" = "%.0f %% chargée";
+"battery.estimated.arrival" = "Arrivée estimée : %.0f %%";
+
+"connector.ccs" = "CCS";
+"connector.chademo" = "CHAdeMO";
+"connector.tesla" = "Tesla (NACS)";
+"connector.type2" = "Type 2";
+
+"subscription.trial.active.zero" = "Essai gratuit — se termine aujourd'hui";
+"subscription.trial.active.one" = "Essai gratuit — 1 jour restant";
+"subscription.trial.active.other" = "Essai gratuit — %d jours restants";
+
+"subscription.price.monthly" = "%@ / mois";
+"subscription.price.yearly" = "%@ / an";
+
+"distance.km" = "%.0f km";
+"distance.mi" = "%.0f mi";
+
+"stations.find.nearby" = "Trouver des bornes de recharge à proximité";
+"agent.price.updating" = "Vérification des prix en direct…";
+"purchase.restore" = "Restaurer les achats";
+"purchase.cancelled" = "Achat annulé.";
+"purchase.verification.failed" = "Impossible de vérifier cet achat. Veuillez réessayer.";
+
+"onboarding.welcome.title" = "Bienvenue sur Eva";
+"onboarding.welcome.subtitle" = "Votre compagnon de recharge VE respectueux de la vie privée";
+"settings.language" = "Langue";
+"settings.units" = "Unités";
+"settings.units.metric" = "Kilomètres";
+"settings.units.imperial" = "Miles";

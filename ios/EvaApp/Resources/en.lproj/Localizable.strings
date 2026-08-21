@@ -1,0 +1,41 @@
+/* ios/EvaApp/Resources/en.lproj/Localizable.strings */
+
+"app.title" = "Eva AI";
+
+"range.warning.title" = "Insufficient Range";
+"range.warning.body" = "Your battery won't cover this route. A charging stop is required near %@.";
+
+"charge.stop.added" = "Charging stop added: %@ (%.0f kW)";
+
+"manifest.unavailable.offline" = "No offline charging data for this area yet. It will update on your next connection.";
+
+"battery.soc" = "%.0f%% charged";
+"battery.estimated.arrival" = "Estimated arrival: %.0f%%";
+
+"connector.ccs" = "CCS";
+"connector.chademo" = "CHAdeMO";
+"connector.tesla" = "Tesla (NACS)";
+"connector.type2" = "Type 2";
+
+"subscription.trial.active.zero" = "Free trial — ends today";
+"subscription.trial.active.one" = "Free trial — 1 day left";
+"subscription.trial.active.other" = "Free trial — %d days left";
+
+"subscription.price.monthly" = "%@ / month";
+"subscription.price.yearly" = "%@ / year";
+
+"distance.km" = "%.0f km";
+"distance.mi" = "%.0f mi";
+
+"stations.find.nearby" = "Find charging stations nearby";
+"agent.price.updating" = "Checking live prices…";
+"purchase.restore" = "Restore purchases";
+"purchase.cancelled" = "Purchase cancelled.";
+"purchase.verification.failed" = "We couldn't verify this purchase. Please try again.";
+
+"onboarding.welcome.title" = "Welcome to Eva";
+"onboarding.welcome.subtitle" = "Your privacy-first EV charging companion";
+"settings.language" = "Language";
+"settings.units" = "Units";
+"settings.units.metric" = "Kilometers";
+"settings.units.imperial" = "Miles";

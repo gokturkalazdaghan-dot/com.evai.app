@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+
+  Yuvarlak launcher ikonu (bazi launcher.lar bunu tercih eder). Projenin minSdk'si 26 oldugu icin PNG yogunluk
+  setlerine (mipmap-hdpi/xhdpi/...) GEREK YOKTUR - adaptive icon API 26+
+  tarafindan desteklenir ve tum yogunluklar vektorden turetilir.
+-->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+    <monochrome android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>

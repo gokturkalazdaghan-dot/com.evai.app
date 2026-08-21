@@ -1,0 +1,3 @@
+# fastlane/android/Appfile
+json_key_file("play-service-account.json")
+package_name("com.eva.app")
