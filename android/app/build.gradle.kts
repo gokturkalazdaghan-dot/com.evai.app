@@ -169,7 +169,10 @@ android {
 
     signingConfigs {
         if (hasReleaseKeystore) {
-            create("release") {
+            // maybeCreate: AGP bazi surumlerde "release" yapilandirmasini
+            // kendisi tanimliyor ve create() "zaten var" hatasi veriyor.
+            // maybeCreate varsa mevcut olani doner, yoksa olusturur.
+            maybeCreate("release").apply {
                 storeFile = file(keystorePath!!)
                 storePassword = project.findProperty("EVA_KEYSTORE_PASSWORD") as String?
                 keyAlias = project.findProperty("EVA_KEY_ALIAS") as String?
@@ -285,20 +288,4 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-}
-
-android {
-    signingConfigs {
-        create("release") {
-            storeFile = file("release-key.jks")
-            storePassword = "123456"
-            keyAlias = "my-key-alias"
-            keyPassword = "123456"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            signingConfig = signingConfigs.getByName("release")
-        }
-    }
 }
