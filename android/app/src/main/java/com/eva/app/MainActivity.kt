@@ -60,6 +60,7 @@ import com.eva.app.location.LocationStatus
 import com.eva.app.location.LocationViewModel
 import com.eva.app.ui.location.LocationRequiredScreen
 import com.eva.app.ui.dashboard.DashboardScreen
+import com.eva.app.ui.hud.VehicleHudScreen
 import com.eva.app.ui.settings.SettingsScreen
 import com.eva.app.ui.stations.StationDetailScreen
 import com.eva.app.ui.stations.StationDto
@@ -113,6 +114,7 @@ private object EvaRoutes {
     const val SUBSCRIPTION = "subscription"
     const val STATION_DETAIL = "station_detail"
     const val SETTINGS = "settings"
+    const val VEHICLE_HUD = "vehicle_hud"
 }
 
 /**
@@ -222,6 +224,11 @@ private fun EvaApp(navController: NavHostController = rememberNavController()) {
 
     Scaffold(
         bottomBar = {
+            // Arac paneli TAM EKRAN: kendi basina bir ortam, sekmelerden
+            // biri degil. Alt cubuk burada dursaydi ekran "bir sekme daha"
+            // gibi okunur ve HUD'un kaplama hissi kaybolurdu.
+            if (currentRoute == EvaRoutes.VEHICLE_HUD) return@Scaffold
+
             NavigationBar {
                 EvaTab.entries.forEach { tab ->
                     NavigationBarItem(
@@ -323,6 +330,22 @@ private fun EvaNavHost(
                 isLocationStale = !location.isPrecise,
                 onStationSelected = onStationSelected,
                 onSettingsClick = { navController.navigate(EvaRoutes.SETTINGS) },
+                onVehicleClick = { navController.navigate(EvaRoutes.VEHICLE_HUD) },
+            )
+        }
+
+        // Arac paneli: donen 3B arac ve cevresinde canli telemetri.
+        // Panelde kucuk bir gorsel olarak degil, kendi ekraninda --
+        // dort kose okumasi icin yer gerekiyor ve surucu bu ekrana
+        // "araca bakmak" icin bilincli olarak giriyor.
+        composable(EvaRoutes.VEHICLE_HUD) {
+            val onboardingViewModel: VehicleOnboardingViewModel = hiltViewModel()
+            val vehicleState by onboardingViewModel.currentVehicle
+                .collectAsStateWithLifecycle()
+
+            VehicleHudScreen(
+                vehicle = vehicleState,
+                onBack = { navController.popBackStack() },
             )
         }
 

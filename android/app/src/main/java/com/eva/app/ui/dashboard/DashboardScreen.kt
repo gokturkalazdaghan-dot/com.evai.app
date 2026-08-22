@@ -104,6 +104,7 @@ fun DashboardScreen(
     isLocationStale: Boolean,
     onStationSelected: (StationDto) -> Unit = {},
     onSettingsClick: () -> Unit = {},
+    onVehicleClick: () -> Unit = {},
 ) {
     val uiState by dashboardViewModel.uiState.collectAsState()
     val liveTelemetry by vehicleMonitorViewModel.telemetry.collectAsState()
@@ -172,8 +173,20 @@ fun DashboardScreen(
                 )
             }
 
-            // Arac gorseli: sag/sola kaydirilarak incelenebilir.
-            VehicleTurntable(modifier = Modifier.padding(top = 12.dp))
+            // Arac gorseli: dokununca telemetri paneline gecer.
+            // Kaydirma hareketi turntable'in kendisine ait oldugu icin
+            // tiklama DIS katmanda; ikisi ayni Modifier'da olsaydi
+            // kaydirma her seferinde tiklama olarak da algilanirdi.
+            Box(
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .clickable(
+                        onClickLabel = stringResource(R.string.hud_open),
+                        onClick = onVehicleClick,
+                    ),
+            ) {
+                VehicleTurntable()
+            }
 
             // Harita YALNIZCA gecerli bir MAPS_API_KEY varken cizilir;
             // yoksa bu composable hicbir sey yayinlamaz (bkz. StationMap).

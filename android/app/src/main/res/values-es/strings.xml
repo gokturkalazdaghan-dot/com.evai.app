@@ -169,4 +169,17 @@
     <string name="settings_delete_data_error">No se eliminó nada: %1$s</string>
     <string name="settings_delete_confirm_title">¿Eliminar todo?</string>
     <string name="settings_delete_confirm_body">Tu perfil de vehículo, el historial de carga, la ubicación guardada y los precios en caché se eliminarán permanentemente de este teléfono y de nuestros servidores. Esta acción no se puede deshacer.</string>
+    <string name="hud_title">Panel del vehículo</string>
+    <string name="hud_charge">Carga</string>
+    <string name="hud_range">Autonomía</string>
+    <string name="hud_battery">Batería</string>
+    <string name="hud_source">Fuente</string>
+    <string name="hud_source_oem">OEM</string>
+    <string name="hud_source_vehicle">COCHE</string>
+    <string name="hud_source_obd">OBD</string>
+    <string name="hud_source_manual">MANUAL</string>
+    <string name="hud_stale">obsoleto</string>
+    <string name="hud_live">en vivo</string>
+    <string name="hud_minutes_ago">%1$d min</string>
+    <string name="hud_open">Abrir panel del vehículo</string>
 </resources>

@@ -172,4 +172,17 @@
     <string name="settings_delete_data_error">Hiçbir şey silinmedi: %1$s</string>
     <string name="settings_delete_confirm_title">Her şey silinsin mi?</string>
     <string name="settings_delete_confirm_body">Araç profiliniz, şarj geçmişiniz, kayıtlı konumunuz ve önbellekteki fiyatlar bu telefondan ve sunucularımızdan kalıcı olarak silinecek. Bu işlem geri alınamaz.</string>
+    <string name="hud_title">Araç paneli</string>
+    <string name="hud_charge">Şarj</string>
+    <string name="hud_range">Menzil</string>
+    <string name="hud_battery">Batarya</string>
+    <string name="hud_source">Kaynak</string>
+    <string name="hud_source_oem">OEM</string>
+    <string name="hud_source_vehicle">ARAÇ</string>
+    <string name="hud_source_obd">OBD</string>
+    <string name="hud_source_manual">ELLE</string>
+    <string name="hud_stale">bayat</string>
+    <string name="hud_live">canlı</string>
+    <string name="hud_minutes_ago">%1$d dk</string>
+    <string name="hud_open">Araç panelini aç</string>
 </resources>

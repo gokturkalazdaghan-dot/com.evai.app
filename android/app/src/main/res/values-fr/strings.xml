@@ -169,4 +169,17 @@
     <string name="settings_delete_data_error">Rien n\'a été supprimé : %1$s</string>
     <string name="settings_delete_confirm_title">Tout supprimer ?</string>
     <string name="settings_delete_confirm_body">Votre profil de véhicule, l\'historique de charge, la position enregistrée et les prix en cache seront définitivement supprimés de ce téléphone et de nos serveurs. Cette action est irréversible.</string>
+    <string name="hud_title">Panneau véhicule</string>
+    <string name="hud_charge">Charge</string>
+    <string name="hud_range">Autonomie</string>
+    <string name="hud_battery">Batterie</string>
+    <string name="hud_source">Source</string>
+    <string name="hud_source_oem">OEM</string>
+    <string name="hud_source_vehicle">VOITURE</string>
+    <string name="hud_source_obd">OBD</string>
+    <string name="hud_source_manual">MANUEL</string>
+    <string name="hud_stale">périmé</string>
+    <string name="hud_live">en direct</string>
+    <string name="hud_minutes_ago">%1$d min</string>
+    <string name="hud_open">Ouvrir le panneau véhicule</string>
 </resources>

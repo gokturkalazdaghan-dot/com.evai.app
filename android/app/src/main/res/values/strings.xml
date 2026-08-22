@@ -169,4 +169,17 @@
     <string name="settings_delete_data_error">Nothing was deleted: %1$s</string>
     <string name="settings_delete_confirm_title">Delete everything?</string>
     <string name="settings_delete_confirm_body">Your vehicle profile, charge history, saved location and cached prices will be permanently deleted from this phone and from our servers. This cannot be undone.</string>
+    <string name="hud_title">Vehicle panel</string>
+    <string name="hud_charge">Charge</string>
+    <string name="hud_range">Range</string>
+    <string name="hud_battery">Battery</string>
+    <string name="hud_source">Source</string>
+    <string name="hud_source_oem">OEM</string>
+    <string name="hud_source_vehicle">CAR</string>
+    <string name="hud_source_obd">OBD</string>
+    <string name="hud_source_manual">MANUAL</string>
+    <string name="hud_stale">stale</string>
+    <string name="hud_live">live</string>
+    <string name="hud_minutes_ago">%1$d min</string>
+    <string name="hud_open">Open vehicle panel</string>
 </resources>

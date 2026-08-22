@@ -169,4 +169,17 @@
     <string name="settings_delete_data_error">Es wurde nichts gelöscht: %1$s</string>
     <string name="settings_delete_confirm_title">Alles löschen?</string>
     <string name="settings_delete_confirm_body">Ihr Fahrzeugprofil, der Ladeverlauf, der gespeicherte Standort und zwischengespeicherte Preise werden dauerhaft von diesem Telefon und von unseren Servern gelöscht. Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="hud_title">Fahrzeugpanel</string>
+    <string name="hud_charge">Ladung</string>
+    <string name="hud_range">Reichweite</string>
+    <string name="hud_battery">Akku</string>
+    <string name="hud_source">Quelle</string>
+    <string name="hud_source_oem">OEM</string>
+    <string name="hud_source_vehicle">AUTO</string>
+    <string name="hud_source_obd">OBD</string>
+    <string name="hud_source_manual">MANUELL</string>
+    <string name="hud_stale">veraltet</string>
+    <string name="hud_live">live</string>
+    <string name="hud_minutes_ago">%1$d Min.</string>
+    <string name="hud_open">Fahrzeugpanel öffnen</string>
 </resources>
