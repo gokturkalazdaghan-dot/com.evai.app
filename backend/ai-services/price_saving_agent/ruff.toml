@@ -1,0 +1,49 @@
+# backend/ai-services/price_saving_agent/ruff.toml
+#
+# NEDEN ACIK BIR YAPILANDIRMA VAR
+# -------------------------------
+# CI `pip install ruff` diyor, yani surum SABITLENMEMIS. Yapilandirma
+# olmadan etkin kural kumesi ruff'un o gunku varsayilani olur; ruff yeni
+# bir surumde kural eklediginde, kodda hicbir sey degismemisken CI
+# kirmiziya doner. Kural secimini burada sabitlemek bunu onler.
+#
+# Secim dar ve bilincli: DOGRULUK hatalarini yakalayan kurallar acik,
+# uslup tercihleri kapali.
+
+target-version = "py311"
+
+[lint]
+select = [
+    "E4",  # import bicimi hatalari
+    "E7",  # ifade duzeyi hatalar
+    "E9",  # sozdizimi / calisma zamani riskleri
+    "F",   # pyflakes: tanimsiz ad, kullanilmayan import/degisken
+    "I",   # import siralamasi
+]
+
+# NEDEN DAHA GENIS DEGIL
+# ----------------------
+# Asagidaki kurallar kasitli olarak DISARIDA birakildi; hepsi bu kod
+# tabaninda gerekcesi olan desenleri "hata" sayiyordu:
+#
+#   BLE001 (blind-except): Fiyat toplama hatti tek bir istasyonun
+#     hatasi yuzunden durmamali. Genis yakalamalar bilincli ve her biri
+#     yaninda gerekcesiyle yazili.
+#
+#   FURB157 (verbose-decimal): Decimal("0") yerine Decimal(0) oneriyor.
+#     Para isleyen bir kodda Decimal'i HER ZAMAN dizgeden kurmak
+#     bilincli bir aliskanlik: Decimal(0.1) ile Decimal("0.1") ayni sey
+#     DEGILDIR. Sifir icin zararsiz olmasi, okuyucuyu "hangi sayi
+#     literali guvenli" diye dusunmeye zorlamayi hakli cikarmaz.
+#
+#   TRY004: Dis bir API'nin beklenmedik yanit tipinde TypeError istiyor.
+#     Burada soz konusu olan programlama hatasi degil, GECERSIZ VERI --
+#     ValueError dogru sinif ve cagiran taraf onu yakaliyor.
+#
+#   UP012/UP045: Uslup. .encode("utf-8") acikligi burada kasitli, cunku
+#     ayni bayt dizisi Gateway tarafinda da uretiliyor ve sozlesmenin
+#     gorunur olmasi degerli.
+
+[lint.per-file-ignores]
+# Testlerde uzun parametre listeleri ve tekrar eden kurulum normaldir.
+"tests/*" = ["E501"]

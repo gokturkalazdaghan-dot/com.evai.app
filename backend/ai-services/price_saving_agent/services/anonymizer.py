@@ -52,8 +52,29 @@ _PATTERNS: dict[PiiCategory, re.Pattern[str]] = {
     PiiCategory.EMAIL: re.compile(
         r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"
     ),
+    # Telefon deseni bu dosyadaki EN GENIS desen; iki tarafli sinirlandi.
+    #
+    # Onceki hali herhangi bir "6+ rakam + ayirac" dizisini telefon
+    # sayiyordu ve YAPISAL VERIYI yiyordu: istasyon enlemi (41.008238),
+    # ucret (1250.50) ve ISO zaman damgasi (2026-08-22T10:00:00Z) hepsi
+    # [REDACTED_PHONE] oluyordu. Tarife boru hatti sanitize_dict'ten
+    # gecen sozlukten valid_from alanini okuyup ayristirdigi icin, ISO
+    # zaman damgasi donen gercek bir CPO'da tarifeler bozulurdu.
+    #
+    # Uc koruma eklendi:
+    #   1. (?<![\d.])  ve  (?![\d.])  -> eslesme bir sayinin ORTASINDAN
+    #      baslayamaz/bitemez.
+    #   2. ISO tarih on-kontrolu -> 2026-08-22 telefon degildir.
+    #   3. Duz ondalik sayi on-kontrolu -> "41.008238" bir sayidir.
+    #      Ayirt edici olcut: duz ondalikta TEK nokta vardir; noktali
+    #      yazilan bir telefonda (555.123.4567) EN AZ IKI nokta bulunur,
+    #      bu yuzden o hala yakalanir.
     PiiCategory.PHONE: re.compile(
+        r"(?<![\d.])"
+        r"(?!\d{4}-\d{2}-\d{2})"
+        r"(?!-?\d+\.\d+(?![\d.]))"
         r"(?:\+?\d{1,3}[\s.-]?)?(?:\(?\d{2,4}\)?[\s.-]?){2,4}\d{2,4}"
+        r"(?![\d.])"
     ),
     PiiCategory.IBAN: re.compile(
         r"\b[A-Z]{2}\d{2}[A-Z0-9]{10,30}\b"

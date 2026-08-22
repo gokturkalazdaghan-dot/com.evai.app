@@ -59,3 +59,10 @@ keystore.properties
 # vardi -- bir sonraki commit'te GitHub'a gidecekti.
 local.properties
 **/local.properties
+
+# Test ve statik analiz ciktilari
+.coverage
+coverage.xml
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/

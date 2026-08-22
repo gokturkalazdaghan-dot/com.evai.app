@@ -1,7 +1,7 @@
 # backend/ai-services/price_saving_agent/services/db_service.py
-from decimal import Decimal
 import logging
 from contextlib import asynccontextmanager
+from decimal import Decimal
 
 import asyncpg
 
