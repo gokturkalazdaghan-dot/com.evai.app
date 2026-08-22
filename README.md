@@ -132,7 +132,7 @@ environment oluşturup **Required reviewers** ekleyin — bu olmadan
    key'i alıp `android/local.properties`'e `REVENUECAT_PUBLIC_API_KEY`
    olarak yazın.
 6. **Integrations → Webhooks** bölümünde Gateway'inizin
-   `https://api.evaapp.com/v1/billing/webhooks/revenuecat/events`
+   `https://api.armanalabs.com/v1/billing/webhooks/revenuecat/events`
    adresini ekleyin, bir "Authorization header value" (Bearer secret)
    belirleyin — bu değeri Gateway `.env`'inde
    `REVENUECAT_WEBHOOK_AUTH_SECRET` olarak tanımlayın (ikisi birebir aynı

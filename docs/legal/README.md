@@ -35,7 +35,7 @@ En hızlı ve ücretsiz yol GitHub Pages:
 3. Adres şu biçimde olur:
    `https://kullanici.github.io/eva-legal/privacy-policy-tr`
 
-Kendi alan adınız varsa (`alan-adiniz.com`) politikayı orada yayınlamak
+Politika artık kendi alan adınızda yayınlanıyor (`armanalabs.com/legal/...`);
 daha iyidir: uygulama, sunucu ve politika aynı alan adı altında olur.
 
 ### Play Console'a girilecek alanlar

@@ -12,7 +12,7 @@ REVENUECAT_PUBLIC_API_KEY=goog_XXXXXXXXXXXXXXXXXXXXXXXXXXX
 EVA_GATEWAY_BASE_URL_DEBUG=http://10.0.2.2:3000
 
 ## Production Gateway adresiniz
-EVA_GATEWAY_BASE_URL_RELEASE=https://api.evaapp.com
+EVA_GATEWAY_BASE_URL_RELEASE=https://api.armanalabs.com
 
 ## Google Cloud Console -> proje numaranız (Play Integrity API için)
 GOOGLE_CLOUD_PROJECT_NUMBER=123456789012

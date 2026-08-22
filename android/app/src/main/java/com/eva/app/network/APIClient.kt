@@ -68,7 +68,7 @@ class APIClient(
     @PublishedApi internal val registrationGate: DeviceRegistrationGate,
     /**
      * Gateway sunucu sertifikanızın SHA-256 SPKI pin değeri.
-     * Üretimi: `openssl s_client -connect api.evaapp.com:443 | openssl x509
+     * Üretimi: `openssl s_client -connect api.armanalabs.com:443 | openssl x509
      * -pubkey -noout | openssl pkey -pubin -outform der | openssl dgst
      * -sha256 -binary | openssl enc -base64`
      * Sertifika yenilendiğinde bu değer DEĞİŞİR — bu yüzden ikinci bir
