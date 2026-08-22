@@ -136,7 +136,24 @@ android {
         // Google Maps API anahtari. Manifest'e meta-data olarak, koda da
         // BuildConfig uzerinden gecer. Bos birakilirsa harita DEVRE DISI
         // kalir (bos/gri bir harita gostermek yerine liste gosterilir).
-        val mapsApiKey = (project.findProperty("MAPS_API_KEY") ?: "") as String
+        val mapsApiKey = run {
+            val configured = (project.findProperty("MAPS_API_KEY") ?: "") as String
+            val isReleaseBuild = gradle.startParameter.taskNames
+                .any { it.contains("Release", ignoreCase = true) }
+
+            // Debug'da bos kalabilir (harita yerine liste gosterilir), ama
+            // URETIMDE bos bir anahtarla cikmak, magazadaki uygulamanin
+            // ana ekraninda harita OLMAMASI demek. Sessizce olmasindansa
+            // derlemenin durmasi iyi: CI'da MAPS_API_KEY secret'i
+            // tanimlanmadigi icin bu tam olarak yasanabilirdi.
+            if (isReleaseBuild && configured.isBlank()) {
+                throw GradleException(
+                    "MAPS_API_KEY tanimli degil. Uretim surumu haritasiz cikamaz; " +
+                        "local.properties'e ya da CI secret'larina ekleyin."
+                )
+            }
+            configured
+        }
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
         buildConfigField("String", "MAPS_API_KEY", "\"$mapsApiKey\"")
 

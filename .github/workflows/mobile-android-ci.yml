@@ -36,7 +36,11 @@ jobs:
           sdk.dir=${ANDROID_HOME}
           REVENUECAT_PUBLIC_API_KEY=goog_ci_placeholder_not_functional
           EVA_GATEWAY_BASE_URL_DEBUG=http://10.0.2.2:3000
-          EVA_GATEWAY_BASE_URL_RELEASE=https://api.evaapp.com
+          # Bu iş yalnızca debug derliyor; release adresi hiç kullanılmaz.
+          # Yine de BİZE AİT OLMAYAN gerçek bir alan adı yazmıyoruz —
+          # yer tutucu olduğu ilk bakışta anlaşılmalı, yoksa birileri onu
+          # geçerli yapılandırma sanıp kopyalayabilir.
+          EVA_GATEWAY_BASE_URL_RELEASE=https://ci-placeholder.invalid
           GOOGLE_CLOUD_PROJECT_NUMBER=0
           EOF
 
@@ -65,7 +69,11 @@ jobs:
           sdk.dir=${ANDROID_HOME}
           REVENUECAT_PUBLIC_API_KEY=goog_ci_placeholder_not_functional
           EVA_GATEWAY_BASE_URL_DEBUG=http://10.0.2.2:3000
-          EVA_GATEWAY_BASE_URL_RELEASE=https://api.evaapp.com
+          # Bu iş yalnızca debug derliyor; release adresi hiç kullanılmaz.
+          # Yine de BİZE AİT OLMAYAN gerçek bir alan adı yazmıyoruz —
+          # yer tutucu olduğu ilk bakışta anlaşılmalı, yoksa birileri onu
+          # geçerli yapılandırma sanıp kopyalayabilir.
+          EVA_GATEWAY_BASE_URL_RELEASE=https://ci-placeholder.invalid
           GOOGLE_CLOUD_PROJECT_NUMBER=0
           EOF
       - run: ./gradlew assembleDebug

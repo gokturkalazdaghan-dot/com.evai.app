@@ -57,16 +57,58 @@ jobs:
           bundler-cache: true
           working-directory: fastlane/android
 
+      # Sunucu adresi ve Maps anahtarı APK'nın İÇİNE derlenir; yanlış
+      # değerle üretilen bir sürüm Play'e yüklendikten sonra geri
+      # alınamaz. Bu yüzden derlemeden ÖNCE doğrulanıyorlar.
+      #
+      # Adres neden sabit yazılamaz: burada bir zamanlar
+      # `https://api.evaapp.com` sabiti duruyordu — BİZE AİT OLMAYAN bir
+      # alan adı. O haliyle üretilen bir sürüm, kullanıcıların imzalı
+      # isteklerini (cihaz kimliği + konum) o alan adının sahibine
+      # gönderirdi ve karşı taraf istediği fiyatı döndürebilirdi. Aynı
+      # hata build.gradle.kts tarafında düzeltilmişti ama bu workflow
+      # atlanmıştı.
+      - name: Verify release secrets are configured
+        env:
+          EVA_GATEWAY_BASE_URL_RELEASE: ${{ secrets.EVA_GATEWAY_BASE_URL_RELEASE }}
+          MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
+          REVENUECAT_PUBLIC_API_KEY: ${{ secrets.REVENUECAT_PUBLIC_API_KEY }}
+        run: |
+          fail=0
+          require() {
+            if [ -z "$2" ]; then
+              echo "::error::$1 secret'ı tanımlı değil — üretim sürümü bu değer olmadan derlenemez."
+              fail=1
+            fi
+          }
+          require EVA_GATEWAY_BASE_URL_RELEASE "$EVA_GATEWAY_BASE_URL_RELEASE"
+          require MAPS_API_KEY "$MAPS_API_KEY"
+          require REVENUECAT_PUBLIC_API_KEY "$REVENUECAT_PUBLIC_API_KEY"
+
+          case "$EVA_GATEWAY_BASE_URL_RELEASE" in
+            https://*) ;;
+            "") ;;
+            *)
+              echo "::error::EVA_GATEWAY_BASE_URL_RELEASE https:// ile başlamalı."
+              fail=1
+              ;;
+          esac
+
+          exit $fail
+
       - name: Create local.properties with real RevenueCat/Gateway values
         env:
           REVENUECAT_PUBLIC_API_KEY: ${{ secrets.REVENUECAT_PUBLIC_API_KEY }}
           GOOGLE_CLOUD_PROJECT_NUMBER: ${{ secrets.GOOGLE_CLOUD_PROJECT_NUMBER }}
+          EVA_GATEWAY_BASE_URL_RELEASE: ${{ secrets.EVA_GATEWAY_BASE_URL_RELEASE }}
+          MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
         run: |
           cat > local.properties << EOF
           sdk.dir=${ANDROID_HOME}
           REVENUECAT_PUBLIC_API_KEY=${REVENUECAT_PUBLIC_API_KEY}
+          MAPS_API_KEY=${MAPS_API_KEY}
           EVA_GATEWAY_BASE_URL_DEBUG=http://10.0.2.2:3000
-          EVA_GATEWAY_BASE_URL_RELEASE=https://api.evaapp.com
+          EVA_GATEWAY_BASE_URL_RELEASE=${EVA_GATEWAY_BASE_URL_RELEASE}
           GOOGLE_CLOUD_PROJECT_NUMBER=${GOOGLE_CLOUD_PROJECT_NUMBER}
           EOF
 
