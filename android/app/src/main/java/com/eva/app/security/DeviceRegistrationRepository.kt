@@ -41,6 +41,8 @@ class DeviceRegistrationRepository(
     private val apiClient: APIClient,
     private val secureTokenStore: SecureTokenStore,
     private val requestSigner: RequestSigner,
+    /** Kayit bitince imzali istekleri serbest birakir. */
+    private val registrationGate: DeviceRegistrationGate,
 ) {
     companion object {
         private const val KEY_DEVICE_ID = SecureTokenStore.KEY_DEVICE_SIGNING_ID
@@ -60,7 +62,17 @@ class DeviceRegistrationRepository(
         return newId
     }
 
-    suspend fun ensureRegistered(): DeviceRegistrationState {
+    suspend fun ensureRegistered(): DeviceRegistrationState =
+        try {
+            register()
+        } finally {
+            // BASARILI DA OLSA OLMASA DA kapiyi ac. Aksi halde kayit
+            // basarisiz oldugunda her imzali istek bosuna zaman asimi
+            // bekler ve ekran gec dolar.
+            registrationGate.markAttempted()
+        }
+
+    private suspend fun register(): DeviceRegistrationState {
         if (!requestSigner.ensureKeyExists()) {
             return DeviceRegistrationState.Failed("İmzalama anahtarı oluşturulamadı.")
         }

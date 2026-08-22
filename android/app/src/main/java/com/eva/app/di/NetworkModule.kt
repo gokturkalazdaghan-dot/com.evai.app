@@ -4,6 +4,7 @@ package com.eva.app.di
 import com.eva.app.core.AppConfig
 import com.eva.app.network.APIClient
 import com.eva.app.privacy.DataDeletionRepository
+import com.eva.app.security.DeviceRegistrationGate
 import com.eva.app.security.DeviceRegistrationRepository
 import com.eva.app.security.PlayIntegrityManager
 import com.eva.app.security.RequestSigner
@@ -35,12 +36,14 @@ object NetworkModule {
         playIntegrityManager: PlayIntegrityManager,
         secureTokenStore: SecureTokenStore,
         requestSigner: RequestSigner,
+        registrationGate: DeviceRegistrationGate,
     ): APIClient {
         return APIClient(
             baseUrl = AppConfig.gatewayBaseUrl,
             playIntegrityManager = playIntegrityManager,
             secureTokenStore = secureTokenStore,
             requestSigner = requestSigner,
+            registrationGate = registrationGate,
             certificatePins = AppConfig.gatewayCertificatePins,
         )
     }
@@ -51,8 +54,14 @@ object NetworkModule {
         apiClient: APIClient,
         secureTokenStore: SecureTokenStore,
         requestSigner: RequestSigner,
+        registrationGate: DeviceRegistrationGate,
     ): DeviceRegistrationRepository {
-        return DeviceRegistrationRepository(apiClient, secureTokenStore, requestSigner)
+        return DeviceRegistrationRepository(
+            apiClient,
+            secureTokenStore,
+            requestSigner,
+            registrationGate,
+        )
     }
 
     @Provides

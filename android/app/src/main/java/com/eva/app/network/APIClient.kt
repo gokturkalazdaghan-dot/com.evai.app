@@ -5,6 +5,7 @@ import android.util.Log
 import com.eva.app.BuildConfig
 import com.eva.app.security.PlayIntegrityManager
 import com.eva.app.security.RequestSigner
+import com.eva.app.security.DeviceRegistrationGate
 import com.eva.app.security.SecureTokenStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -59,6 +60,12 @@ class APIClient(
     private val playIntegrityManager: PlayIntegrityManager,
     private val secureTokenStore: SecureTokenStore,
     private val requestSigner: RequestSigner,
+    /**
+     * Imzali isteklerin cihaz kaydini beklemesini saglar. Kayittan
+     * ONCE giden bir istek imzasiz cikar ve 401 alir; bkz.
+     * DeviceRegistrationGate dosya basi yorumu.
+     */
+    @PublishedApi internal val registrationGate: DeviceRegistrationGate,
     /**
      * Gateway sunucu sertifikanızın SHA-256 SPKI pin değeri.
      * Üretimi: `openssl s_client -connect api.evaapp.com:443 | openssl x509
@@ -121,6 +128,7 @@ class APIClient(
             .addHeader("x-eva-locale", Locale.getDefault().language)
 
         if (requiresAuth) {
+            awaitRegistrationIfSigned(path)
             attachAttestationHeaders(requestBuilder)
             attachAttestationTokenAsync(requestBuilder, sha256Hex(bodyJson))
             attachSignatureHeadersIfApplicable(requestBuilder, path, "POST", bodyJson)
@@ -148,12 +156,25 @@ class APIClient(
             .addHeader("x-eva-locale", Locale.getDefault().language)
 
         if (requiresAuth) {
+            awaitRegistrationIfSigned(path)
             attachAttestationHeaders(requestBuilder)
             attachAttestationTokenAsync(requestBuilder, sha256Hex(urlBuilder.toString()))
             attachSignatureHeadersIfApplicable(requestBuilder, path, "GET", "")
         }
 
         executeRequest(requestBuilder.build())
+    }
+
+    /**
+     * Imza gerektiren bir yol icin cihaz kaydinin bitmesini bekler.
+     *
+     * Kayit isteginin KENDISI beklemez: `/v1/devices/register` imzadan
+     * muaf ve kaydi tamamlayacak olan da odur -- beklerse kendi kendini
+     * kilitler.
+     */
+    @PublishedApi internal suspend fun awaitRegistrationIfSigned(path: String) {
+        if (path in PATHS_EXEMPT_FROM_SIGNATURE) return
+        registrationGate.awaitAttempted()
     }
 
     fun attachAttestationHeaders(requestBuilder: Request.Builder) {

@@ -16,6 +16,7 @@ import {
   SubscriptionEntitlementEntity,
 } from './entitlements/entitlement.entity';
 import { DevicesModule } from './devices/devices.module';
+import { HealthController } from './health/health.controller';
 import { PrivacyModule } from './privacy/privacy.module';
 import { CacheModule } from './cache/cache.module';
 import { IpAllowlistMiddleware } from './common/middleware/ip-allowlist.middleware';
@@ -92,6 +93,7 @@ import { DevicePublicKeyEntity } from './devices/entities/device-public-key.enti
     TelemetryModule,
     PrivacyModule,
   ],
+  controllers: [HealthController],
   providers: [
     {
       provide: APP_GUARD,
