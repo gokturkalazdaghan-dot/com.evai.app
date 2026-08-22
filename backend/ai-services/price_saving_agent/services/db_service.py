@@ -143,11 +143,13 @@ class DbService:
         limit: int = 8,
     ) -> list[dict]:
         """
-        Voice Co-pilot ajanının GERÇEK veriye dayanarak yanıt üretebilmesi
-        için kullanılır — LLM'e "en yakın istasyonları uydur" denmez,
-        PostGIS'ten gelen kesin mesafe/fiyat verisi prompt'a enjekte edilir.
-        Bu, ajanın halüsinasyon yapıp var olmayan bir istasyon/fiyat
-        söylemesini yapısal olarak engeller.
+        Bir noktanın çevresindeki istasyonları, kesin mesafe ve son bilinen
+        tarifeyle birlikte döndürür.
+
+        ŞU AN ÇAĞRILMIYOR: tek kullanıcısı Voice Co-pilot'tu ve o üründen
+        çıkarıldı (bkz. _archive/voice-assistant/). Sorgu doğru ve
+        bağımsız olduğu için silinmedi; asistan geri geldiğinde ya da
+        sunucu tarafı bir "yakındakiler" ucu gerektiğinde hazır.
         """
         connector_filter_sql = ""
         params: list = [lon, lat, radius_meters]

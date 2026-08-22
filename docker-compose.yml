@@ -106,22 +106,6 @@ services:
     environment:
       POSTGRES_DSN: postgresql://postgres:eva_dev_password@postgres:5432/eva_dev
       REDIS_URL: redis://redis:6379
-      # --- LLM saglayici secimi -------------------------------------
-      # LLM yalnizca Voice Co-pilot tarafindan kullanilir; fiyat toplama
-      # hatti deterministiktir (bkz. services/tariff_pipeline.py).
-      # Gecerli degerler: anthropic | groq | gemini | openai_compatible
-      VOICE_LLM_PROVIDER: ${VOICE_LLM_PROVIDER:-anthropic}
-      # Model adlari saglayici ONEKI OLMADAN yazilir; onek llm_factory ekler.
-      VOICE_AGENT_MODEL_NAME: ${VOICE_AGENT_MODEL_NAME:-claude-sonnet-4-6}
-      # Anahtarlar: YALNIZCA secilen saglayicininki zorunlu (config.py
-      # icindeki dogrulayici acilista kontrol eder). Bu yuzden burada
-      # hicbiri ":?" ile zorunlu tutulmuyor.
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
-      GROQ_API_KEY: ${GROQ_API_KEY:-}
-      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
-      OPENAI_COMPATIBLE_API_KEY: ${OPENAI_COMPATIBLE_API_KEY:-}
-      OPENAI_COMPATIBLE_BASE_URL: ${OPENAI_COMPATIBLE_BASE_URL:-}
-      VOICE_AGENT_MAX_RESPONSE_CHARS: "280"
       INTERNAL_SERVICE_MASTER_SECRET: ${INTERNAL_SERVICE_MASTER_SECRET:-dev_only_internal_secret_min_32_characters_xx}
       # Varsayılan değer, mock-cpo-aggregator servisinin container adını
       # hedefler — `docker compose --profile mock up` ile birlikte

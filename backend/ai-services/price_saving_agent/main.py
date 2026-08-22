@@ -1,23 +1,18 @@
 # backend/ai-services/price_saving_agent/main.py
-import base64
 import logging
 from contextlib import asynccontextmanager
 
-from pydantic import BaseModel
-from fastapi import Depends, FastAPI, HTTPException, status, File, UploadFile
+from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.responses import JSONResponse
 
 from config import settings
-from models.agent_schemas import AgentRunRequest, AgentRunResult, AgentHealthDetail
-from models.voice_schemas import VoiceQueryRequest, VoiceQueryResponse
-from services.db_service import db_service
-from services.redis_publisher import redis_publisher
-from services.internal_auth import require_internal_service_key
+from models.agent_schemas import AgentHealthDetail, AgentRunRequest, AgentRunResult
 from orchestrator import orchestrator
+from services.db_service import db_service
+from services.internal_auth import require_internal_service_key
 from services.openchargemap_adapter import OpenChargeMapAdapter
+from services.redis_publisher import redis_publisher
 from services.station_ingest import ingest_stations
-from services.transcription_service import TranscriptionError, transcribe
-from agents.voice_copilot_agent import VoiceCopilotAgent
 
 logging.basicConfig(
     level=logging.INFO,
@@ -36,11 +31,6 @@ async def lifespan(app: FastAPI):
     logger.info("Servis kapatılıyor, bağlantılar temizleniyor...")
     await db_service.close()
     await redis_publisher.close()
-
-
-class TranscribeBase64Request(BaseModel):
-    audio_base64: str
-    language: str = "tr"
 
 
 app = FastAPI(
@@ -152,84 +142,6 @@ async def ingest_stations_from_source(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Istasyon envanteri alinamadi.",
         ) from exc
-
-
-@app.post("/v1/voice/transcribe")
-async def transcribe_audio(
-    audio: UploadFile = File(...),
-    language: str = "tr",
-    _: None = Depends(require_internal_service_key),
-) -> dict:
-    """
-    Ses -> metin. Uygulama mikrofon kaydini buraya yukler.
-
-    Groq anahtari SUNUCUDA kalir; uygulamaya gomulmez (APK'dan string
-    cikarmak onemsizdir). Bkz. services/transcription_service.py.
-    """
-    try:
-        audio_bytes = await audio.read()
-        text = await transcribe(
-            audio_bytes,
-            filename=audio.filename or "speech.wav",
-            language=language,
-        )
-        # Bos transkript UYDURULMAZ; istemci bunu "anlasilmadi" olarak
-        # ele alir.
-        return {"text": text, "recognized": bool(text)}
-    except TranscriptionError as exc:
-        logger.warning("Transkripsiyon reddedildi: %s", exc)
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=str(exc),
-        ) from exc
-    except Exception as exc:
-        logger.error("Transkripsiyon beklenmeyen hata.", exc_info=exc)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Ses islenemedi.",
-        ) from exc
-
-
-@app.post("/v1/voice/transcribe-base64")
-async def transcribe_audio_base64(
-    request: TranscribeBase64Request,
-    _: None = Depends(require_internal_service_key),
-) -> dict:
-    """
-    Gateway'den gelen base64 sesi metne cevirir.
-
-    Multipart yerine base64: Gateway'deki RequestSignatureGuard govdeyi
-    JSON.stringify uzerinden hash'liyor, multipart bu sozlesmeyi kirardi
-    (bkz. voice-transcribe.dto.ts).
-    """
-    try:
-        audio_bytes = base64.b64decode(request.audio_base64, validate=True)
-    except Exception as exc:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Gecersiz base64 ses verisi.",
-        ) from exc
-
-    try:
-        text = await transcribe(audio_bytes, language=request.language)
-        return {"text": text, "recognized": bool(text)}
-    except TranscriptionError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)
-        ) from exc
-
-
-@app.post("/v1/voice/interpret", response_model=VoiceQueryResponse)
-async def interpret_voice_query(
-    request: VoiceQueryRequest,
-    _: None = Depends(require_internal_service_key),
-) -> VoiceQueryResponse:
-    """
-    Yalnızca NestJS Gateway'den (X-Internal-Service-Key ile doğrulanmış)
-    çağrılır. Bu endpoint'e doğrudan dışarıdan erişim reddedilir.
-    """
-    agent = VoiceCopilotAgent(db_service=db_service)
-    return await agent.answer(request)
 
 
 @app.exception_handler(Exception)

@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 
 if [ ! -f .env ]; then
   echo "HATA: .env dosyası yok. Önce şunu çalıştır: cp .env.example .env"
-  echo "Sonra .env içine en az ANTHROPIC_API_KEY değerini yaz."
+  echo "Sonra .env içindeki degerleri doldur (OPENCHARGEMAP_API_KEY, OCPI_*)."
   exit 1
 fi
 

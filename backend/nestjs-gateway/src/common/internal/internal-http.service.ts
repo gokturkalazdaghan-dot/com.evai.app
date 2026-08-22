@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { InternalKeyDeriver } from './internal-key.util';
 
 /**
- * Python AI servisine (Fiyat Tasarruf Ajanı / Voice Co-pilot) giden TÜM
+ * Python AI servisine (Fiyat Tasarruf Ajanı) giden TÜM
  * dahili isteklerin tek geçiş noktası. Her istek otomatik olarak dönen
  * X-Internal-Service-Key header'ı ile imzalanır — Python servisi bu
  * header olmadan hiçbir isteği kabul etmez (bkz. services/internal_auth.py).

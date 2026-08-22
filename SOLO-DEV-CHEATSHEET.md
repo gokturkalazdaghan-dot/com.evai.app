@@ -146,12 +146,14 @@ alman gerektiğini not al. Bu da ilerlemedir, kendine baskı yapma.
 
 ---
 
-## 4. Sesli Asistan + Güvenlik Katmanı Eklendikten Sonra
+## 4. Güvenlik Katmanı Eklendikten Sonra
 
-Yeni eklenen iki büyük parça: **Sesli Asistan** (`voice/` dizinleri, hem
-Android hem NestJS hem Python'da) ve **Had Safha Güvenlik**
-(`RequestSigner`, `RequestSignatureGuard`, `DeviceIntegrityChecker`,
-Certificate Pinning).
+Eklenen büyük parça: **Had Safha Güvenlik** (`RequestSigner`,
+`RequestSignatureGuard`, `DeviceIntegrityChecker`, Certificate Pinning).
+
+> Sesli asistan üründen ÇIKARILDI. Kodu `_archive/voice-assistant/`
+> altında duruyor; neden çıkarıldığı ve geri getirmek için neyin
+> gerektiği oradaki README'de yazıyor.
 
 **Bilmen gereken tek şey:** İki yeni ortam değişkeni eklendi —
 `INTERNAL_SERVICE_MASTER_SECRET` (Gateway ve Python'da BİREBİR AYNI

@@ -7,7 +7,6 @@
     <!-- Yakındaki şarj istasyonlarını bulmak için konum izni -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- Sesli asistan (Voice Co-pilot) için mikrofon izni -->
     <!-- RevenueCat/Play Billing için gerekli -->
     <uses-permission android:name="com.android.vending.BILLING" />
 

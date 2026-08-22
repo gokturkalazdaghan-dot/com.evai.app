@@ -58,8 +58,6 @@ jobs:
       # kullanılmıyor.
       POSTGRES_DSN: postgresql://postgres:eva_test_password@localhost:5432/eva_test
       REDIS_URL: redis://localhost:6379
-      ANTHROPIC_API_KEY: sk-test-mock-key-not-real
-      AGENT_MODEL_NAME: claude-sonnet-4-6
       OCPI_AGGREGATOR_BASE_URL: http://localhost:9999
       OCPI_AGGREGATOR_API_KEY: test-key
     steps:

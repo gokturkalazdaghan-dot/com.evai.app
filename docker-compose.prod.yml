@@ -88,7 +88,6 @@ services:
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
       INTERNAL_SERVICE_MASTER_SECRET: ${INTERNAL_SERVICE_MASTER_SECRET:?ic servis siri gerekli}
       OPENCHARGEMAP_API_KEY: ${OPENCHARGEMAP_API_KEY:?OCM anahtari gerekli}
-      GROQ_API_KEY: ${GROQ_API_KEY:-}
     ports: !reset []
     deploy:
       resources:

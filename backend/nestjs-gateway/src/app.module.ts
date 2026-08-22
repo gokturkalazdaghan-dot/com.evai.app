@@ -8,7 +8,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { APP_GUARD } from '@nestjs/core';
 import { StationsModule } from './stations/stations.module';
 import { BillingModule } from './billing/billing.module';
-import { VoiceModule } from './voice/voice.module';
 import { RoutingModule } from './routing/routing.module';
 import { EntitlementsModule } from './entitlements/entitlements.module';
 import { TelemetryModule } from './telemetry/telemetry.module';
@@ -37,13 +36,10 @@ import { DevicePublicKeyEntity } from './devices/entities/device-public-key.enti
       envFilePath: '.env',
     }),
 
-    // Genel API rate-limiting — Claude API çağrısı tetikleyen /v1/voice/*
-    // endpoint'i kendi daha sıkı @Throttle dekoratörüne sahip (bkz.
-    // voice.controller.ts); bu, GENEL bir taban seviye korumadır: aynı
-    // IP'den dakikada 100'den fazla istek gelirse 429 döner. Tek başına
-    // scraping'i engellemez (bkz. RequestSignatureGuard + DeviceAttestationGuard
-    // ana savunma katmanlarıdır) ama kaba kuvvet/otomatik tarama
-    // girişimlerini yavaşlatır.
+    // Genel API rate-limiting: aynı IP'den dakikada 100'den fazla istek
+    // gelirse 429 döner. Tek başına scraping'i engellemez — ana savunma
+    // katmanları RequestSignatureGuard ve DeviceAttestationGuard'dır —
+    // ama kaba kuvvet ve otomatik tarama girişimlerini yavaşlatır.
     ThrottlerModule.forRoot([
       {
         name: 'default',
@@ -89,7 +85,6 @@ import { DevicePublicKeyEntity } from './devices/entities/device-public-key.enti
     DevicesModule,
     StationsModule,
     BillingModule,
-    VoiceModule,
     RoutingModule,
     // @Cron dekoratorleri bu modul olmadan SESSIZCE calismaz.
     ScheduleModule.forRoot(),
