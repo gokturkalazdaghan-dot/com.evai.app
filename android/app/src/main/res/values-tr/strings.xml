@@ -19,6 +19,10 @@
     <string name="connector_type2">Type 2</string>
 
     <plurals name="subscription_trial_active">
+        <!-- Türkçe sayıya göre çekim yapmaz: "1 gün" ve "5 gün" aynı
+             biçimdedir. Yine de CLDR Türkçe için "one" tanımlar ve
+             eksik bırakmak lint hatası veriyordu. -->
+        <item quantity="one">Ücretsiz deneme — %d gün kaldı</item>
         <item quantity="other">Ücretsiz deneme — %d gün kaldı</item>
     </plurals>
 

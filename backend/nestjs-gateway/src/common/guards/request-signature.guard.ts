@@ -76,7 +76,6 @@ export class RequestSignatureGuard implements CanActivate {
     }
 
     const method = request.method;
-    const path = request.route?.path ?? request.path;
     const bodyHash = createHash('sha256')
       .update(request.method === 'GET' ? '' : JSON.stringify(request.body ?? {}))
       .digest('hex');

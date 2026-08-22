@@ -8,8 +8,8 @@ const BASE32_CHARS = '0123456789bcdefghjkmnpqrstuvwxyz';
  * cache key çakışması sıfır.
  */
 export function encodeGeohash(lat: number, lon: number, precision: number): string {
-  let latRange: [number, number] = [-90, 90];
-  let lonRange: [number, number] = [-180, 180];
+  const latRange: [number, number] = [-90, 90];
+  const lonRange: [number, number] = [-180, 180];
   let isEven = true;
   let bit = 0;
   let ch = 0;

@@ -2,6 +2,7 @@
 package com.eva.app.vehicle.telemetry
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -82,6 +83,7 @@ class BatteryAlertNotifier @Inject constructor(
      * @param level esik; kritik seviye farkli renk/oncelik alir.
      * @param message kullaniciya gosterilecek metin.
      */
+    @SuppressLint("MissingPermission")
     fun notify(level: BatteryAlertLevel, message: String) {
         if (!hasPermission()) return
 
@@ -121,7 +123,10 @@ class BatteryAlertNotifier @Inject constructor(
             )
             .build()
 
-        // İzin yukarida kontrol edildi; yine de sistem reddedebilir.
+        // İzin bu metodun ilk satırında kontrol edildi (hasPermission());
+        // lint yardımcı metodu takip edemediği için uyarıyor. Çağrı
+        // ayrıca runCatching içinde: sistem yine de reddederse
+        // (SecurityException) bildirim düşer ama uygulama çökmez.
         runCatching {
             NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, notification)
         }

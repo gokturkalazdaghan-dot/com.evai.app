@@ -1,6 +1,7 @@
 // android/app/src/main/java/com/eva/app/security/RequestSigner.kt
 package com.eva.app.security
 
+import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
@@ -60,39 +61,60 @@ class RequestSigner {
                 ANDROID_KEYSTORE,
             )
 
-            val specBuilder = KeyGenParameterSpec.Builder(
-                SIGNING_KEY_ALIAS,
-                KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY,
-            )
-                .setDigests(KeyProperties.DIGEST_SHA256)
-                .setAlgorithmParameterSpec(java.security.spec.ECGenParameterSpec("secp256r1"))
-
-            // StrongBox (ayrı bir güvenlik çipi) varsa kullan — daha güçlü
-            // izolasyon sağlar. Desteklenmeyen cihazlarda normal TEE'ye
-            // (Trusted Execution Environment) sessizce düşer.
-            try {
-                specBuilder.setIsStrongBoxBacked(true)
-                keyPairGenerator.initialize(specBuilder.build())
-                keyPairGenerator.generateKeyPair()
-            } catch (e: Exception) {
-                Log.w(TAG, "StrongBox kullanılamıyor, standart TEE ile devam ediliyor.")
-                val fallbackSpec = KeyGenParameterSpec.Builder(
-                    SIGNING_KEY_ALIAS,
-                    KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY,
-                )
-                    .setDigests(KeyProperties.DIGEST_SHA256)
-                    .setAlgorithmParameterSpec(java.security.spec.ECGenParameterSpec("secp256r1"))
-                    .build()
-                keyPairGenerator.initialize(fallbackSpec)
-                keyPairGenerator.generateKeyPair()
+            // StrongBox (ayrı bir güvenlik çipi) daha güçlü izolasyon
+            // sağlar ama API 28'de geldi ve her cihazda yok.
+            //
+            // SÜRÜM KONTROLÜ NEDEN ŞART
+            // -------------------------
+            // Bu çağrı önceden yalnızca try/catch(Exception) ile
+            // korunuyordu. API 26-27'de var olmayan bir metodu çağırmak
+            // NoSuchMethodError fırlatır ve o bir Error'dur, Exception
+            // DEĞİL — yani catch bloğu onu YAKALAMAZ. Android 8.0/8.1
+            // cihazlarda anahtar üretimi çöker, cihaz hiç kaydolamaz ve
+            // uygulama tek bir imzalı istek bile atamaz. minSdk 26 olduğu
+            // için bu cihazlar hedef kitlemizin içinde.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                try {
+                    keyPairGenerator.initialize(buildKeySpec(strongBox = true))
+                    keyPairGenerator.generateKeyPair()
+                    return true
+                } catch (e: Exception) {
+                    // StrongBoxUnavailableException dahil: çip yoksa ya da
+                    // doluysa standart TEE ile devam edilir.
+                    Log.w(TAG, "StrongBox kullanılamıyor, standart TEE ile devam ediliyor.")
+                }
             }
 
+            keyPairGenerator.initialize(buildKeySpec(strongBox = false))
+            keyPairGenerator.generateKeyPair()
             true
         } catch (e: Exception) {
             Log.e(TAG, "Anahtar üretimi başarısız.", e)
             false
         }
     }
+
+    /**
+     * İmzalama anahtarının parametreleri.
+     *
+     * Tek yerde tanımlı: StrongBox'lı ve StrongBox'sız sürümler daha önce
+     * ayrı ayrı yazılıyordu ve birinde yapılan bir değişiklik ötekine
+     * yansımayabilirdi. İki cihaz sınıfında farklı özellikte anahtar
+     * üretmek, fark edilmesi çok zor bir hata olurdu.
+     */
+    private fun buildKeySpec(strongBox: Boolean): KeyGenParameterSpec =
+        KeyGenParameterSpec.Builder(
+            SIGNING_KEY_ALIAS,
+            KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_VERIFY,
+        )
+            .setDigests(KeyProperties.DIGEST_SHA256)
+            .setAlgorithmParameterSpec(java.security.spec.ECGenParameterSpec("secp256r1"))
+            .apply {
+                if (strongBox && Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    setIsStrongBoxBacked(true)
+                }
+            }
+            .build()
 
     /**
      * Base64 encode edilmiş genel anahtar (public key) — cihaz kayıt

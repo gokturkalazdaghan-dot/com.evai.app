@@ -2,6 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
+import { randomBytes } from 'crypto';
 
 import type { LiveTelemetry } from './telemetry.types';
 
@@ -96,5 +97,5 @@ function panelTokenKey(token: string): string {
 
 function randomToken(): string {
   // 32 bayt: tahmin edilemez olmasi icin fazlasiyla yeterli.
-  return require('crypto').randomBytes(32).toString('base64url');
+  return randomBytes(32).toString('base64url');
 }

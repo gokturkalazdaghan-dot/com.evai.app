@@ -1,6 +1,6 @@
 // backend/nestjs-gateway/src/app.module.ts
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RedisModule } from '@nestjs-modules/ioredis';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';

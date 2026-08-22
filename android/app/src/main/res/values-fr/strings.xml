@@ -19,7 +19,7 @@
     <string name="connector_type2">Type 2</string>
 
     <plurals name="subscription_trial_active">
-        <item quantity="one">Essai gratuit — 1 jour restant</item>
+        <item quantity="one">Essai gratuit — %d jour restant</item>
         <item quantity="other">Essai gratuit — %d jours restants</item>
     </plurals>
 

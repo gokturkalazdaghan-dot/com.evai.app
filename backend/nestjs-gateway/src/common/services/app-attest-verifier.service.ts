@@ -2,7 +2,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as cbor from 'cbor';
-import { createHash, createVerify, X509Certificate } from 'crypto';
+import { createHash, X509Certificate } from 'crypto';
 
 /**
  * Apple App Attest doğrulama servisi. İstemcinin (AppAttestManager.swift)
