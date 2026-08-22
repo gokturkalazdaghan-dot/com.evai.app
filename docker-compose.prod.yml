@@ -53,6 +53,24 @@ services:
       # gonderebilen herkes API'yi kullanabilir.
       DEVICE_ATTESTATION_ENFORCED: "true"
 
+      # Play Integrity servis hesabi anahtari.
+      #
+      # ZORUNLU: DEVICE_ATTESTATION_ENFORCED=true iken bu dosya olmadan
+      # Gateway ACILMAZ ve bu DOGRU davranis -- Android dogrulamasinin
+      # tek dayanagi bu. Ilk uretim denemesinde tam da burada takildi:
+      # degisken ne burada ne .env sablonunda vardi, operator neye
+      # ihtiyaci oldugunu goremiyordu.
+      #
+      # Anahtar konteynerin ICINE sabit bir yola baglanir; host'taki yeri
+      # PLAY_INTEGRITY_KEY_FILE ile verilir.
+      GOOGLE_PLAY_INTEGRITY_SERVICE_ACCOUNT_KEY_PATH: /run/secrets/play-integrity.json
+
+      # iOS App Attest kok CA'si. Bir iOS istemcisi YAYINLANANA KADAR bos
+      # kalabilir: bos oldugunda servis acilir ama TUM iOS attestation
+      # istekleri reddedilir (bkz. app-attest-verifier.service.ts).
+      APPLE_APP_ATTEST_ROOT_CA_BASE64: ${APPLE_APP_ATTEST_ROOT_CA_BASE64:-}
+      APPLE_TEAM_ID: ${APPLE_TEAM_ID:-}
+
       ADMIN_API_KEY: ${ADMIN_API_KEY:?ADMIN_API_KEY gerekli}
       APPLE_APP_BUNDLE_ID: com.evai.app
       ANDROID_PACKAGE_NAME: com.evai.app
@@ -75,6 +93,11 @@ services:
     # Gateway'e DISARIDAN dogrudan erisilmez; onunde Caddy durur ve TLS'i
     # o sonlandirir. Port acmak, HTTPS'i atlayan bir yol birakmak olurdu.
     ports: !reset []
+    volumes:
+      # Play Integrity servis hesabi anahtari, SALT OKUNUR baglanir.
+      # Anahtari imaja gomup kayit defterine gondermek, imaja erisen
+      # herkese Google hesabinizi acmak olurdu.
+      - ${PLAY_INTEGRITY_KEY_FILE:?Play Integrity anahtar dosyasinin yolu gerekli}:/run/secrets/play-integrity.json:ro
     networks:
       - eva-network
     deploy:

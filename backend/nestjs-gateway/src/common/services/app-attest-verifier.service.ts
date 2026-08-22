@@ -26,22 +26,38 @@ export class AppAttestVerifierService {
       this.configService.get<string>('DEVICE_ATTESTATION_ENFORCED', 'true') === 'true';
 
     if (!rootCertBase64) {
-      // Fail-closed: attestation zorunluyken (üretim varsayılanı) kök CA
-      // olmadan açılışa izin verilmez — davranış değişmedi.
+      // KÖK CA YOKSA SERVİS AÇILIR; İOS DOĞRULAMASI KAPALI KALIR.
+      //
+      // Burada eskiden throw vardı ve attestation zorunluyken TÜM
+      // Gateway'in açılmasını engelliyordu. Üretim yığını ilk kez
+      // çalıştırıldığında tam olarak bu yaşandı: gateway sonsuz yeniden
+      // başlama döngüsüne girdi.
+      //
+      // Ürün Android; bir iOS istemcisi YOK. Apple'a ait bir sertifika
+      // eksik diye sunucunun hiç kalkmaması güvenliği artırmıyor,
+      // AZALTIYOR: sunucuyu ayağa kaldırmanın tek yolu
+      // DEVICE_ATTESTATION_ENFORCED=false yapmaktır ve o bayrak ANDROID
+      // doğrulamasını da kapatır. Yani "fail-closed" niyetli bu satır,
+      // operatörü tüm platformlarda doğrulamayı kapatmaya itiyordu.
+      //
+      // Fail-closed davranışı DOĞRU YERDE zaten duruyor: verify() kök CA
+      // yokken daima false döner (aşağıya bakın). Kök CA olmadan hiçbir
+      // iOS attestation'ı "doğrulanmış" sayılamaz.
+      this.rootCertificate = null;
+
       if (attestationEnforced) {
-        throw new Error(
-          'APPLE_APP_ATTEST_ROOT_CA_BASE64 tanımlı değil. App Attest doğrulaması yapılamaz.',
+        this.logger.error(
+          'APPLE_APP_ATTEST_ROOT_CA_BASE64 tanımlı değil: iOS App Attest doğrulaması ' +
+            'YAPILAMAZ ve tüm iOS attestation istekleri REDDEDİLECEK. Android (Play ' +
+            'Integrity) doğrulaması bundan etkilenmez. Bir iOS istemcisi yayınlarsanız ' +
+            'bu değeri MUTLAKA doldurun.',
+        );
+      } else {
+        this.logger.warn(
+          'APPLE_APP_ATTEST_ROOT_CA_BASE64 tanımlı değil ve DEVICE_ATTESTATION_ENFORCED=false. ' +
+            'Cihaz doğrulaması TAMAMEN devre dışı — yalnızca yerel geliştirme için geçerlidir.',
         );
       }
-
-      // Attestation açıkça devre dışı bırakıldıysa (yerel geliştirme) servis
-      // ayağa kalkabilir. verify() bu durumda DAİMA false döner; kök CA
-      // olmadan hiçbir attestation "doğrulanmış" sayılmaz.
-      this.logger.warn(
-        'APPLE_APP_ATTEST_ROOT_CA_BASE64 tanımlı değil ve DEVICE_ATTESTATION_ENFORCED=false. ' +
-          'App Attest doğrulaması DEVRE DIŞI — yalnızca yerel geliştirme için geçerli bir yapılandırmadır.',
-      );
-      this.rootCertificate = null;
       return;
     }
 
