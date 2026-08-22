@@ -32,10 +32,28 @@ function Sonuc($ok, $baslik, $detay) {
 $lp = Join-Path $PSScriptRoot "..\android\local.properties"
 if (-not (Test-Path $lp)) { throw "local.properties bulunamadi: $lp" }
 
+# TURK KLAVYESI TUZAGI -- BURAYA DIKKAT
+# ------------------------------------
+# Burada once `-match` kullaniliyordu. PowerShell'de `-match` BUYUK/KUCUK
+# HARF DUYARSIZ ve KULTURE BAGLIDIR. Turkce kulturde (tr-TR) buyuk 'I'
+# harfinin kucugu 'i' degil NOKTASIZ 'ı'dir ve bu harf [A-Za-z] araliginda
+# yoktur. Sonuc: adinda 'I' gecen HER ayar sessizce atlaniyordu --
+# MAPS_API_KEY, PRIVACY_POLICY_URL, EVA_KEYSTORE_FILE, EVA_KEY_ALIAS,
+# REVENUECAT_PUBLIC_API_KEY...
+#
+# Yani bu kontrol, Turkce bir makinede yapilandirma DOGRU oldugu halde
+# 7 hata bildiriyordu. Yanlis alarm veren bir uretim kapisi, bir sure
+# sonra herkesin gormezden geldigi bir kapiya doner.
+#
+# `-cmatch` buyuk/kucuk harfe duyarlidir ve bu kulturel donusumu
+# yapmaz. Karakter kumesine rakam ve nokta da eklendi: sdk.dir ve
+# GATEWAY_CERT_PIN_1 gibi anahtarlar da onceden atlaniyordu.
 $props = @{}
-Get-Content $lp | Where-Object { $_ -match '^\s*[A-Za-z_]+\s*=' } | ForEach-Object {
+Get-Content $lp | Where-Object { $_ -cmatch '^\s*[A-Za-z_][A-Za-z0-9_.]*\s*=' } | ForEach-Object {
     $kv = $_.Split('=', 2)
-    $props[$kv[0].Trim()] = $kv[1].Trim()
+    # BOM (dosyanin ilk baytlari) anahtar adina yapisir; temizlenmezse
+    # ilk ayar hicbir zaman bulunamaz.
+    $props[$kv[0].Trim().TrimStart([char]0xFEFF)] = $kv[1].Trim()
 }
 
 Write-Host "`n=== EVA AI yayin oncesi kontrol ===`n" -ForegroundColor Cyan
@@ -46,7 +64,9 @@ $api = $props['EVA_GATEWAY_BASE_URL_RELEASE']
 Sonuc ([bool]$api) "adres tanimli" $api
 
 if ($api) {
-    Sonuc ($api -like 'https://*') "HTTPS kullaniyor"
+    # -clike: yukaridaki ayni kulturel tuzak. Sabit protokol adlari
+    # her zaman ORDINAL karsilastirilmali.
+    Sonuc ($api -clike 'https://*') "HTTPS kullaniyor"
 
     $host_ = ([Uri]$api).Host
     $dns = $null
@@ -73,8 +93,11 @@ Sonuc ([bool]$props['EVA_KEYSTORE_PASSWORD']) "parola tanimli"
 # --- 3. Abonelik ---
 Write-Host "`n3. Abonelik" -ForegroundColor White
 $rc = $props['REVENUECAT_PUBLIC_API_KEY']
-Sonuc ($rc -and $rc.StartsWith('goog_')) "RevenueCat anahtari goog_ ile basliyor"
-Sonuc ($rc -notlike '*PLACEHOLDER*') "yer tutucu degil"
+# StartsWith varsayilan olarak KULTURE BAGLI karsilastirir. RevenueCat
+# oneki sabit bir teknik dizedir; kullanicinin dilinden etkilenmemeli.
+Sonuc ($rc -and $rc.StartsWith('goog_', [System.StringComparison]::Ordinal)) `
+    "RevenueCat anahtari goog_ ile basliyor"
+Sonuc ($rc -cnotlike '*PLACEHOLDER*') "yer tutucu degil"
 
 # --- 4. Yasal ---
 Write-Host "`n4. Yasal belgeler" -ForegroundColor White
