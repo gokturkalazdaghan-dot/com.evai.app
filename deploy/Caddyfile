@@ -3,7 +3,6 @@
 # Caddy TLS sertifikasini kendisi alir ve yeniler. Elle sertifika
 # yonetimi, yenilemenin unutuldugu gun TUM kullanicilarin baglanamamasi
 # demektir -- ve bu sessizce olur, uygulama yalnizca "baglanamiyor" der.
-
 {
 	email {$ACME_EMAIL}
 
@@ -72,4 +71,39 @@
 			}
 		}
 	}
+}
+
+# ---------------------------------------------------------------------
+# Tanitim sitesi
+# ---------------------------------------------------------------------
+# AYNI SUNUCU, AYRI ALAN ADI. Caddy istekleri alan adina gore ayirir:
+#   api.armanalabs.com -> Gateway (yukaridaki blok)
+#   armanalabs.com     -> statik site (bu blok)
+#
+# Neden ayri alt alan adi: uygulamanin sunucu adresi APK'nin ICINE
+# derleniyor. Site ile API ayni adreste olsaydi, siteyi baska bir yere
+# tasimak istediginiz gun uygulamayi da tasimak zorunda kalirdiniz --
+# ve o, magazadaki her kullanici icin yeni bir surum demektir.
+#
+# WEB_DOMAIN bos birakilabilir: site yayinlanmaz, API calismaya devam
+# eder. Site zorunlu degil.
+# Iki adres de BURADA listelenmeli. Yalnizca ciplak alan adi yazilsaydi
+# www'ye gelen istek hicbir blokla eslesmez, Caddy o adres icin sertifika
+# bile almazdi -- asagidaki yonlendirme de hic calismazdi.
+{$WEB_DOMAIN:site.invalid}, www.{$WEB_DOMAIN:site.invalid} {
+	encode zstd gzip
+	root * /srv/site
+	file_server
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	# www -> ciplak alan adi. Ikisinin de calisip ayri icerik sunmasi
+	# arama motorlarinda ayni sayfanin iki kopyasi olarak gorunur.
+	@www host www.{$WEB_DOMAIN:site.invalid}
+	redir @www https://{$WEB_DOMAIN:site.invalid}{uri} permanent
 }

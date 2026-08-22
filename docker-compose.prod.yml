@@ -133,11 +133,15 @@ services:
       EVA_DOMAIN: ${EVA_DOMAIN:?alan adi gerekli}
       # Sertifika uyarilari (yakinda dolacak, yenilenemedi) buraya gider.
       ACME_EMAIL: ${ACME_EMAIL:?ACME e-postasi gerekli}
+      # Tanitim sitesinin alan adi. BOS BIRAKILABILIR: site yayinlanmaz,
+      # API calismaya devam eder. Site zorunlu bir parca degil.
+      WEB_DOMAIN: ${WEB_DOMAIN:-}
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./deploy/site:/srv/site:ro
       # Sertifikalar KALICI olmali; her yeniden baslatmada yeniden almak
       # Let's Encrypt hiz sinirina takilir ve servis sertifikasiz kalir.
       - caddy_data:/data

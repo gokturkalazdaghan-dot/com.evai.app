@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EVA AI — Gizlilik Politikası — armanalabs</title>
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; background: #05080b; color: #dbe7ee;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    line-height: 1.7;
+  }
+  main { max-width: 46rem; margin: 0 auto; padding: 2.5rem 1.25rem 5rem; }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.15rem; margin-top: 2.2rem; }
+  h3 { font-size: 1rem; }
+  a { color: #38bdf8; }
+  code { background: #0e1620; padding: .1rem .3rem; border-radius: 3px; }
+  hr { border: 0; border-top: 1px solid #1b2833; margin: 2rem 0; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #1b2833; padding: .5rem; text-align: left; }
+  .geri { display: inline-block; margin-bottom: 1.5rem; font-size: .9rem; }
+</style>
+</head>
+<body>
+<main>
+<a class="geri" href="/">&larr; armanalabs</a>
+<h1>EVA AI — Gizlilik Politikası</h1>
+<p><strong>Son güncelleme:</strong> 21 Ağustos 2026
+<strong>Uygulama:</strong> EVA AI (<code>com.evai.app</code>)</p>
+<p>Bu politika, EVA AI mobil uygulamasının hangi verileri topladığını, neden
+topladığını ve bu veriler üzerinde hangi haklara sahip olduğunuzu açıklar.</p>
+<p>Kısaca: <strong>adınızı, e-postanızı, telefon numaranızı istemiyoruz.</strong> Hesap
+açmanız gerekmiyor. Topladığımız her veri, size yakın ve uygun fiyatlı bir
+şarj istasyonu bulmak içindir.</p>
+<hr />
+<h2>1. Topladığımız veriler</h2>
+<h3>1.1 Konum</h3>
+<p><strong>Ne:</strong> Cihazınızın yaklaşık veya kesin konumu (enlem/boylam).</p>
+<p><strong>Neden:</strong> "Yakınımdaki istasyonlar" sorusunun cevabı konuma bağlıdır.
+Konumunuz olmadan hangi istasyonun size yakın veya ucuz olduğunu
+söyleyemeyiz.</p>
+<p><strong>Nasıl kullanılır:</strong> Konum, yakındaki istasyonları sorgulamak ve yol
+tarifi başlatmak için sunucumuza gönderilir. Sorgu sonrası <strong>kalıcı
+olarak saklanmaz</strong>; sunucuda konum geçmişi tutulmaz.</p>
+<p><strong>İzin:</strong> Uygulama içinde reddedebilirsiniz. Reddederseniz uygulama
+çalışmaya devam eder ancak istasyon listesi gösterilemez — çünkü
+gösterilecek bir "yakın" nokta yoktur.</p>
+<h3>1.2 Cihaz kimliği</h3>
+<p><strong>Ne:</strong> Uygulamanın ilk açılışta ürettiği rastgele bir kimlik (UUID) ve
+buna ait bir imzalama anahtarı.</p>
+<p><strong>Neden:</strong> İsteklerin gerçekten uygulamadan geldiğini doğrulamak ve
+abonelik durumunuzu cihazınıza bağlamak için.</p>
+<p><strong>Önemli:</strong> Bu <strong>reklam kimliği değildir</strong>, cihazın donanım kimliği
+(IMEI, MAC, Android ID) değildir ve sizi tanımlamaz. Uygulamayı
+kaldırdığınızda kaybolur.</p>
+<h3>1.3 Araç bilgileri</h3>
+<p><strong>Ne:</strong> Marka, model, batarya kapasitesi, soket tipi ve şarj yüzdesi.</p>
+<p><strong>Nerede saklanır:</strong> <strong>Yalnızca cihazınızda</strong>, şifreli olarak. Marka ve
+model sunucuya gönderilmez.</p>
+<p><strong>Sunucuya giden tek şey:</strong> İstasyon filtrelemesi için soket tipi ve
+şarj yüzdesi. Plaka, şasi numarası (VIN) gibi gerçek dünya kimlikleri
+<strong>hiç toplanmaz</strong>.</p>
+<h3>1.4 Araç telemetrisi (isteğe bağlı)</h3>
+<p><strong>Ne:</strong> Bir OBD-II Bluetooth adaptörü bağlarsanız: batarya yüzdesi,
+tahmini menzil, hız, kilometre ve şarj durumu.</p>
+<p><strong>Neden:</strong> Şarj seviyesini elle girmeniz gerekmesin ve düştüğünde sizi
+uyarabilelim.</p>
+<p><strong>Nasıl:</strong> Adaptör eşleştirmesi telefonunuzun kendi Bluetooth
+ayarlarından yapılır. Uygulama yalnızca eşleştirilmiş adaptörden veri
+okur; çevredeki cihazları taramaz, konum çıkarımı için kullanmaz.</p>
+<p><strong>Tamamen isteğe bağlıdır.</strong> Adaptör bağlamazsanız bu veri hiç
+oluşmaz.</p>
+<h3>1.5 Bildirimler</h3>
+<p>Batarya seviyeniz %50 ve %30'un altına düştüğünde bildirim göndeririz.
+Bildirim iznini reddedebilir veya sonradan kapatabilirsiniz.</p>
+<hr />
+<h2>2. Toplamadığımız veriler</h2>
+<p>Aşağıdakiler <strong>hiçbir koşulda</strong> toplanmaz:</p>
+<ul>
+<li>Ad, soyad, e-posta, telefon numarası</li>
+<li>Reklam kimliği veya izleme tanımlayıcıları</li>
+<li>Rehber, fotoğraflar, dosyalar</li>
+<li><strong>Ses kaydı</strong> (uygulamada sesli asistan bulunmamaktadır)</li>
+<li>Kamera görüntüsü</li>
+<li>Plaka veya şasi numarası</li>
+<li>Konum geçmişi</li>
+</ul>
+<hr />
+<h2>3. Verinin paylaşıldığı yerler</h2>
+<p>Verinizi <strong>satmıyoruz</strong> ve reklam amacıyla kimseyle paylaşmıyoruz.
+Uygulamanın çalışması için aşağıdaki servisler kullanılır:</p>
+<table>
+<thead>
+<tr>
+<th>Servis</th>
+<th>Ne için</th>
+<th>Ne görür</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Google Play Hizmetleri (Haritalar, Konum)</td>
+<td>Harita gösterimi ve konum</td>
+<td>Konum</td>
+</tr>
+<tr>
+<td>Google Play Billing / RevenueCat</td>
+<td>Abonelik yönetimi</td>
+<td>Anonim cihaz kimliği, satın alma durumu</td>
+</tr>
+<tr>
+<td>Google Play Integrity</td>
+<td>Sahte uygulama tespiti</td>
+<td>Cihaz bütünlük durumu</td>
+</tr>
+<tr>
+<td>Open Charge Map</td>
+<td>İstasyon envanteri</td>
+<td>Yalnızca sorgulanan bölge — kişisel veri gitmez</td>
+</tr>
+</tbody>
+</table>
+<p>Yol tarifi başlattığınızda telefonunuzun harita uygulaması açılır ve
+hedef bilgisi ona aktarılır; o noktadan sonra o uygulamanın kendi
+gizlilik politikası geçerlidir.</p>
+<hr />
+<h2>4. Verinin saklanma süresi</h2>
+<table>
+<thead>
+<tr>
+<th>Veri</th>
+<th>Süre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Konum sorgusu</td>
+<td>Saklanmaz (yalnızca istek anında işlenir)</td>
+</tr>
+<tr>
+<td>Cihaz kimliği ve abonelik kaydı</td>
+<td>Abonelik aktifken + sonrasında 12 ay (yasal/muhasebe)</td>
+</tr>
+<tr>
+<td>Araç telemetrisi (son okuma)</td>
+<td>10 dakika, ardından silinir</td>
+</tr>
+<tr>
+<td>Araç profili</td>
+<td>Cihazınızda, siz silene kadar</td>
+</tr>
+<tr>
+<td>Kullanım sayaçları (ücretsiz kota)</td>
+<td>30 gün</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>5. Haklarınız</h2>
+<p>Bulunduğunuz ülkeye göre (AB/AEA ve Birleşik Krallık'ta GDPR, Kaliforniya'da
+CCPA kapsamında) şu haklara sahipsiniz:</p>
+<ul>
+<li><strong>Erişim:</strong> Hakkınızda tuttuğumuz veriyi isteme</li>
+<li><strong>Silme:</strong> Verinizin silinmesini isteme</li>
+<li><strong>Düzeltme:</strong> Yanlış veriyi düzelttirme</li>
+<li><strong>İtiraz ve kısıtlama:</strong> İşlemeye itiraz etme</li>
+<li><strong>Taşınabilirlik:</strong> Verinizi makine tarafından okunabilir biçimde alma</li>
+<li><strong>Şikâyet:</strong> Ülkenizdeki veri koruma otoritesine başvurma</li>
+</ul>
+<h3>Verinizi nasıl silersiniz</h3>
+<p><strong>Uygulama içinden:</strong> Ayarlar → Verilerimi sil.</p>
+<p><strong>E-posta ile:</strong> <a href="mailto:gokturkalazdaghan@gmail.com">gokturkalazdaghan@gmail.com</a>
+adresine "Veri silme talebi" konusuyla yazın. Talebiniz <strong>30 gün içinde</strong>
+karşılanır.</p>
+<p>Uygulamayı kaldırmanız, cihazınızdaki verileri siler; sunucudaki abonelik
+kaydı için yukarıdaki yollardan birini kullanmanız gerekir.</p>
+<hr />
+<h2>6. Hukuki dayanak (GDPR)</h2>
+<table>
+<thead>
+<tr>
+<th>İşleme</th>
+<th>Dayanak</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Konumla istasyon sorgulama</td>
+<td>Açık rıza (izin ekranı)</td>
+</tr>
+<tr>
+<td>Cihaz kimliği ile abonelik</td>
+<td>Sözleşmenin ifası</td>
+</tr>
+<tr>
+<td>Sahtecilik tespiti</td>
+<td>Meşru menfaat</td>
+</tr>
+<tr>
+<td>Araç telemetrisi</td>
+<td>Açık rıza (adaptör bağlama)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>7. Çocuklar</h2>
+<p>EVA AI 13 yaşın altındaki çocuklara yönelik değildir ve bilerek onlardan
+veri toplamaz.</p>
+<hr />
+<h2>8. Veri güvenliği</h2>
+<ul>
+<li>Sunucuyla tüm iletişim <strong>HTTPS</strong> üzerinden şifrelidir.</li>
+<li>İstekler cihaz anahtarıyla <strong>imzalanır</strong>; imzasız istek reddedilir.</li>
+<li>Araç profili cihazda <strong>şifreli</strong> saklanır.</li>
+<li>Ödeme bilgileriniz bize <strong>hiç ulaşmaz</strong> — Google Play işler.</li>
+</ul>
+<hr />
+<h2>9. Değişiklikler</h2>
+<p>Bu politika değişirse güncel sürümü bu adreste yayınlarız ve uygulama
+içinde bildiririz. "Son güncelleme" tarihi en üstte yer alır.</p>
+<hr />
+<h2>10. İletişim</h2>
+<p><strong>Veri sorumlusu:</strong> Göktürk Alazdağhan
+<strong>E-posta:</strong> <a href="mailto:gokturkalazdaghan@gmail.com">gokturkalazdaghan@gmail.com</a></p>
+<p>AB/AEA'da bulunuyorsanız ve endişeniz giderilmezse, bulunduğunuz ülkenin
+veri koruma otoritesine şikâyette bulunma hakkınız saklıdır.</p>
+</main>
+</body>
+</html>
