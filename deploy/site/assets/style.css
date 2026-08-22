@@ -210,7 +210,7 @@ h3 { font-size: 1.15rem; margin: 0 0 .5rem; }
  *
  * Sayfa lang="tr" ve CSS'in text-transform: uppercase kurali Turkce
  * kurallarina gore calisiyor: 'i' harfi 'I' degil NOKTALI 'İ' oluyor.
- * Turkce metinde dogru, ama buradaki iceriik marka adi: "Android"
+ * Turkce metinde dogru, ama buradaki icerik marka adi: "Android"
  * "ANDROİD", "iOS" ise "İOS" olarak cikiyordu.
  *
  * lang="en" eklemek de cozmez: o zaman "iOS" -> "IOS" olur ve markanin

@@ -165,7 +165,7 @@
     <string name="settings_delete_data_action">Meine Daten löschen</string>
     <string name="settings_delete_data_progress">Wird gelöscht…</string>
     <string name="settings_delete_data_done">Ihre Daten wurden gelöscht.</string>
-    <string name="settings_delete_data_subscription_kept">Ihr Abonnement-Datensatz wurde behalten: Das Handelsrecht verlangt die Aufbewahrung des Kaufbelegs, und ein Löschen würde Ihren bezahlten Zugang beenden.</string>
+    <string name="settings_delete_data_subscription_kept">Ihr Abonnement-Datensatz wurde behalten: Das Handelsrecht verlangt die Aufbewahrung des Kaufbelegs, und ein Löschen würde Ihren bezahlten Zugang beenden. Dieses Gerät hat jetzt eine neue anonyme Identität, daher wirkt Premium inaktiv — öffnen Sie Premium und tippen Sie auf „Käufe wiederherstellen“.</string>
     <string name="settings_delete_data_error">Es wurde nichts gelöscht: %1$s</string>
     <string name="settings_delete_confirm_title">Alles löschen?</string>
     <string name="settings_delete_confirm_body">Ihr Fahrzeugprofil, der Ladeverlauf, der gespeicherte Standort und zwischengespeicherte Preise werden dauerhaft von diesem Telefon und von unseren Servern gelöscht. Dies kann nicht rückgängig gemacht werden.</string>

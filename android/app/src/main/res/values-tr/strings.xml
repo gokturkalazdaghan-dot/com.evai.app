@@ -168,7 +168,7 @@
     <string name="settings_delete_data_action">Verilerimi sil</string>
     <string name="settings_delete_data_progress">Siliniyor…</string>
     <string name="settings_delete_data_done">Verileriniz silindi.</string>
-    <string name="settings_delete_data_subscription_kept">Abonelik kaydınız korundu: satış kaydını saklamak muhasebe mevzuatı gereği zorunlu ve silmek ödediğiniz erişimi kapatırdı.</string>
+    <string name="settings_delete_data_subscription_kept">Abonelik kaydınız korundu: satış kaydını saklamak muhasebe mevzuatı gereği zorunlu ve silmek ödediğiniz erişimi kapatırdı. Bu cihaz artık yeni ve anonim bir kimlik kullandığı için Premium pasif görünecek — Premium ekranını açıp “Satın alımları geri yükle” dokunun.</string>
     <string name="settings_delete_data_error">Hiçbir şey silinmedi: %1$s</string>
     <string name="settings_delete_confirm_title">Her şey silinsin mi?</string>
     <string name="settings_delete_confirm_body">Araç profiliniz, şarj geçmişiniz, kayıtlı konumunuz ve önbellekteki fiyatlar bu telefondan ve sunucularımızdan kalıcı olarak silinecek. Bu işlem geri alınamaz.</string>

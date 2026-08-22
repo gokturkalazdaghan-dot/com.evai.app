@@ -165,7 +165,7 @@
     <string name="settings_delete_data_action">Eliminar mis datos</string>
     <string name="settings_delete_data_progress">Eliminando…</string>
     <string name="settings_delete_data_done">Tus datos han sido eliminados.</string>
-    <string name="settings_delete_data_subscription_kept">Se conservó el registro de tu suscripción: la normativa contable obliga a guardar el comprobante de compra, y eliminarlo cortaría el acceso que has pagado.</string>
+    <string name="settings_delete_data_subscription_kept">Se conservó el registro de tu suscripción: la normativa contable obliga a guardar el comprobante de compra, y eliminarlo cortaría el acceso que has pagado. Este dispositivo ahora usa una identidad anónima nueva, así que Premium parecerá inactivo: abre Premium y toca «Restaurar compras».</string>
     <string name="settings_delete_data_error">No se eliminó nada: %1$s</string>
     <string name="settings_delete_confirm_title">¿Eliminar todo?</string>
     <string name="settings_delete_confirm_body">Tu perfil de vehículo, el historial de carga, la ubicación guardada y los precios en caché se eliminarán permanentemente de este teléfono y de nuestros servidores. Esta acción no se puede deshacer.</string>

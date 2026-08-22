@@ -165,7 +165,7 @@
     <string name="settings_delete_data_action">Delete my data</string>
     <string name="settings_delete_data_progress">Deleting…</string>
     <string name="settings_delete_data_done">Your data has been deleted.</string>
-    <string name="settings_delete_data_subscription_kept">Your subscription record was kept: accounting law requires us to retain proof of purchase, and deleting it would cut off access you have paid for.</string>
+    <string name="settings_delete_data_subscription_kept">Your subscription record was kept: accounting law requires us to keep proof of purchase, and deleting it would cut off access you have paid for. This device now has a new anonymous identity, so Premium will look inactive — open Premium and tap “Restore purchases” to get your access back.</string>
     <string name="settings_delete_data_error">Nothing was deleted: %1$s</string>
     <string name="settings_delete_confirm_title">Delete everything?</string>
     <string name="settings_delete_confirm_body">Your vehicle profile, charge history, saved location and cached prices will be permanently deleted from this phone and from our servers. This cannot be undone.</string>

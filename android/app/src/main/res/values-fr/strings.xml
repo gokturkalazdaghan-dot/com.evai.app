@@ -165,7 +165,7 @@
     <string name="settings_delete_data_action">Supprimer mes données</string>
     <string name="settings_delete_data_progress">Suppression…</string>
     <string name="settings_delete_data_done">Vos données ont été supprimées.</string>
-    <string name="settings_delete_data_subscription_kept">Votre enregistrement d\'abonnement a été conservé : la réglementation comptable impose de garder la preuve d\'achat, et le supprimer couperait l\'accès que vous avez payé.</string>
+    <string name="settings_delete_data_subscription_kept">Votre enregistrement d\'abonnement a été conservé : la réglementation comptable impose de garder la preuve d\'achat, et le supprimer couperait l\'accès que vous avez payé. Cet appareil utilise désormais une nouvelle identité anonyme, donc Premium paraîtra inactif : ouvrez Premium et touchez «Restaurer les achats».</string>
     <string name="settings_delete_data_error">Rien n\'a été supprimé : %1$s</string>
     <string name="settings_delete_confirm_title">Tout supprimer ?</string>
     <string name="settings_delete_confirm_body">Votre profil de véhicule, l\'historique de charge, la position enregistrée et les prix en cache seront définitivement supprimés de ce téléphone et de nos serveurs. Cette action est irréversible.</string>
