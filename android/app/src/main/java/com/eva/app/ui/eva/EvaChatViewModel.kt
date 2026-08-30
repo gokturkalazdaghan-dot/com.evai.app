@@ -2,6 +2,7 @@
 package com.eva.app.ui.eva
 
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,7 @@ data class EvaChatUiState(
     val listening: Boolean = false,
     val sessionActive: Boolean = false,
     val thinking: Boolean = false,
+    val speaking: Boolean = false,
     val error: String? = null,
 )
 
@@ -36,6 +38,19 @@ class EvaChatViewModel @Inject constructor(
     fun attachSpeaker(tts: TextToSpeech) {
         speaker = tts
         tts.language = Locale.getDefault()
+        tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+            override fun onStart(utteranceId: String?) {
+                _state.update { it.copy(speaking = true, thinking = false) }
+            }
+
+            override fun onDone(utteranceId: String?) {
+                _state.update { it.copy(speaking = false) }
+            }
+
+            override fun onError(utteranceId: String?) {
+                _state.update { it.copy(speaking = false) }
+            }
+        })
     }
 
     fun detachSpeaker() {
@@ -56,7 +71,7 @@ class EvaChatViewModel @Inject constructor(
      */
     fun onHeard(transcript: String) {
         val current = _state.value
-        if (current.thinking) return
+        if (current.thinking || current.speaking) return
 
         if (!current.sessionActive) {
             val wake = EvaWakeParser.parse(transcript) ?: return
@@ -77,7 +92,7 @@ class EvaChatViewModel @Inject constructor(
 
     fun sendDraft() {
         val text = _state.value.draft.trim()
-        if (text.isBlank() || _state.value.thinking) return
+        if (text.isBlank() || _state.value.thinking || _state.value.speaking) return
         _state.update { it.copy(draft = "") }
         if (!_state.value.sessionActive) activate()
         val wake = EvaWakeParser.parse(text)
@@ -91,12 +106,13 @@ class EvaChatViewModel @Inject constructor(
     private fun greet() {
         val hello = localHello()
         append("assistant", hello, local = true)
+        _state.update { it.copy(speaking = true) }
         speak(hello)
     }
 
     fun send(text: String) {
         val trimmed = text.trim()
-        if (trimmed.isEmpty() || _state.value.thinking) return
+        if (trimmed.isEmpty() || _state.value.thinking || _state.value.speaking) return
 
         append("user", trimmed)
         _state.update { it.copy(thinking = true, error = null, sessionActive = true) }
@@ -111,8 +127,8 @@ class EvaChatViewModel @Inject constructor(
             when (val result = repository.chat(trimmed, history)) {
                 is EvaChatResult.Success -> {
                     append("assistant", result.reply)
+                    _state.update { it.copy(thinking = false, speaking = true) }
                     speak(result.reply)
-                    _state.update { it.copy(thinking = false) }
                 }
                 is EvaChatResult.Failure -> {
                     _state.update { it.copy(thinking = false, error = result.message) }
@@ -132,7 +148,12 @@ class EvaChatViewModel @Inject constructor(
     }
 
     private fun speak(text: String) {
-        speaker?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "eva-${nextId}")
+        val tts = speaker
+        if (tts == null) {
+            _state.update { it.copy(speaking = false) }
+            return
+        }
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "eva-${nextId}")
     }
 
     private fun localHello(): String {

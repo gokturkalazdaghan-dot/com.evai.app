@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -116,6 +115,16 @@ fun EvaChatScreen(
             }
         }
 
+        EvaAtomMic(
+            gather = state.thinking || state.speaking,
+            listening = state.listening,
+            onClick = onMicClick,
+            contentDescription = stringResource(R.string.eva_chat_mic),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(vertical = 8.dp),
+        )
+
         state.error?.let { error ->
             Text(
                 error,
@@ -140,20 +149,6 @@ fun EvaChatScreen(
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
                 keyboardActions = KeyboardActions(onSend = { viewModel.sendDraft() }),
             )
-            IconButton(
-                onClick = onMicClick,
-                enabled = !state.thinking,
-            ) {
-                Icon(
-                    Icons.Filled.Mic,
-                    contentDescription = stringResource(R.string.eva_chat_mic),
-                    tint = if (state.listening) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    },
-                )
-            }
             IconButton(
                 onClick = { viewModel.sendDraft() },
                 enabled = !state.thinking && state.draft.isNotBlank(),
