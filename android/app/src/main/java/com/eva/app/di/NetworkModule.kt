@@ -13,6 +13,7 @@ import com.eva.app.route.RouteRepository
 import android.content.Context
 import com.eva.app.ui.stations.StationsCache
 import com.eva.app.ui.stations.StationsRepository
+import com.eva.app.ui.eva.EvaChatRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -88,5 +89,11 @@ object NetworkModule {
     @Singleton
     fun provideRouteRepository(apiClient: APIClient): RouteRepository {
         return RouteRepository(apiClient)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEvaChatRepository(apiClient: APIClient): EvaChatRepository {
+        return EvaChatRepository(apiClient)
     }
 }

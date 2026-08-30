@@ -185,4 +185,14 @@
     <string name="hud_live">canlı</string>
     <string name="hud_minutes_ago">%1$d dk</string>
     <string name="hud_open">Araç panelini aç</string>
+
+    <string name="tab_eva">Eva</string>
+    <string name="eva_chat_title">Eva</string>
+    <string name="eva_chat_wake_hint">“Hey Eva” de ve konuş. Komut değil, sohbet.</string>
+    <string name="eva_chat_listening_hint">Buradayım. Konuşmaya devam et.</string>
+    <string name="eva_chat_placeholder">Eva’ya yaz…</string>
+    <string name="eva_chat_thinking">Eva düşünüyor…</string>
+    <string name="eva_chat_mic">Eva’ya konuş</string>
+    <string name="eva_chat_send">Gönder</string>
+
 </resources>

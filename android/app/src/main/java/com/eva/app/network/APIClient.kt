@@ -82,7 +82,7 @@ class APIClient(
     @PublishedApi internal val httpClient: OkHttpClient = run {
         val builder = OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(15, TimeUnit.SECONDS)
 
         if (certificatePins.isNotEmpty()) {

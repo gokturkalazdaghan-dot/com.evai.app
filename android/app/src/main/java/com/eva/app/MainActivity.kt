@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.DirectionsCarFilled
 import androidx.compose.material.icons.filled.WorkspacePremium
+import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -60,6 +61,10 @@ import com.eva.app.location.LocationStatus
 import com.eva.app.location.LocationViewModel
 import com.eva.app.ui.location.LocationRequiredScreen
 import com.eva.app.ui.dashboard.DashboardScreen
+import com.eva.app.ui.eva.EvaChatRoute
+import com.eva.app.ui.eva.EvaChatViewModel
+import com.eva.app.ui.eva.EvaSpeechSession
+import com.eva.app.ui.eva.EvaTtsSession
 import com.eva.app.ui.hud.VehicleHudScreen
 import com.eva.app.ui.settings.SettingsScreen
 import com.eva.app.ui.stations.StationDetailScreen
@@ -76,6 +81,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.accompanist.permissions.rememberPermissionState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.json.Json
 
@@ -108,6 +114,7 @@ class MainActivity : ComponentActivity() {
 }
 
 private object EvaRoutes {
+    const val EVA = "eva"
     const val DASHBOARD = "dashboard"
     const val STATIONS_LIST = "stations_list"
     const val VEHICLE = "vehicle"
@@ -120,8 +127,7 @@ private object EvaRoutes {
 /**
  * Alt navigasyon sekmeleri.
  *
- * NOT: sesli asistan üründen çıkarıldı; kodu _archive/voice-assistant
- * altında duruyor.
+ * Eva sohbeti ilk sekme: "hey Eva" ile uyanir, Grok ile konusur.
  */
 private enum class EvaTab(
     val route: String,
@@ -129,6 +135,7 @@ private enum class EvaTab(
     @StringRes val labelRes: Int,
     val icon: ImageVector,
 ) {
+    EVA(EvaRoutes.EVA, R.string.tab_eva, Icons.Filled.Mic),
     DASHBOARD(EvaRoutes.DASHBOARD, R.string.tab_dashboard, Icons.Filled.Dashboard),
     STATIONS(EvaRoutes.STATIONS_LIST, R.string.tab_stations, Icons.Filled.Bolt),
     // Arac bilgileri ve canli batarya durumu.
@@ -148,6 +155,34 @@ private fun EvaApp(navController: NavHostController = rememberNavController()) {
     val location by locationViewModel.location.collectAsStateWithLifecycle()
     val locationStatus by locationViewModel.status.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
+
+    // Eva sohbeti Activity kapsaminda: "hey Eva" hangi sekmede
+    // soylenirse soylensin ayni oturuma dusunur.
+    val evaViewModel: EvaChatViewModel = hiltViewModel()
+    val evaState by evaViewModel.state.collectAsStateWithLifecycle()
+    val micPermission = rememberPermissionState(Manifest.permission.RECORD_AUDIO)
+
+    LaunchedEffect(Unit) {
+        if (!micPermission.status.isGranted) {
+            micPermission.launchPermissionRequest()
+        }
+    }
+
+    EvaTtsSession(evaViewModel)
+
+    EvaSpeechSession(
+        enabled = micPermission.status.isGranted,
+        onHeard = { evaViewModel.onHeard(it) },
+        onListeningChange = { evaViewModel.setListening(it) },
+    )
+
+    LaunchedEffect(evaState.sessionActive) {
+        if (evaState.sessionActive && currentRoute != EvaRoutes.EVA) {
+            navController.navigate(EvaRoutes.EVA) {
+                launchSingleTop = true
+            }
+        }
+    }
 
     // Detay ekranina gecerken secilen istasyon. StationDto @Serializable
     // oldugu icin JSON olarak saklaniyor; boylece ekran dondurulse bile
@@ -261,6 +296,8 @@ private fun EvaApp(navController: NavHostController = rememberNavController()) {
     ) { innerPadding ->
         EvaNavHost(
             navController = navController,
+            evaViewModel = evaViewModel,
+            onRequestMic = { micPermission.launchPermissionRequest() },
             location = location,
             locationStatus = locationStatus,
             onRequestLocationPermission = {
@@ -296,6 +333,8 @@ private fun EvaApp(navController: NavHostController = rememberNavController()) {
 @Composable
 private fun EvaNavHost(
     navController: NavHostController,
+    evaViewModel: EvaChatViewModel,
+    onRequestMic: () -> Unit,
     /** null = konum henuz bilinmiyor; ekranlar duruma gore tepki verir. */
     location: EvaLocation?,
     locationStatus: LocationStatus,
@@ -307,9 +346,16 @@ private fun EvaNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = EvaRoutes.DASHBOARD,
+        startDestination = EvaRoutes.EVA,
         modifier = modifier,
     ) {
+        composable(EvaRoutes.EVA) {
+            EvaChatRoute(
+                viewModel = evaViewModel,
+                onRequestMic = onRequestMic,
+            )
+        }
+
         composable(EvaRoutes.DASHBOARD) {
             // Konum yoksa istasyon SORGULANMAZ. Uydurma bir konumla
             // sorgu yapmak, baska bir sehrin fiyatlarini "yakinindaki"
