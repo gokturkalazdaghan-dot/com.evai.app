@@ -162,8 +162,8 @@ private fun EvaApp(navController: NavHostController = rememberNavController()) {
     val evaState by evaViewModel.state.collectAsStateWithLifecycle()
     val micPermission = rememberPermissionState(Manifest.permission.RECORD_AUDIO)
 
-    LaunchedEffect(Unit) {
-        if (!micPermission.status.isGranted) {
+    LaunchedEffect(currentRoute) {
+        if (currentRoute == EvaRoutes.EVA && !micPermission.status.isGranted) {
             micPermission.launchPermissionRequest()
         }
     }
@@ -171,7 +171,7 @@ private fun EvaApp(navController: NavHostController = rememberNavController()) {
     EvaTtsSession(evaViewModel)
 
     EvaSpeechSession(
-        enabled = micPermission.status.isGranted,
+        enabled = micPermission.status.isGranted && currentRoute == EvaRoutes.EVA,
         onHeard = { evaViewModel.onHeard(it) },
         onListeningChange = { evaViewModel.setListening(it) },
     )

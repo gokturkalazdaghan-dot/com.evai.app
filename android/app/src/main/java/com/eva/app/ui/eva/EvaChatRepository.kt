@@ -28,6 +28,7 @@ class EvaChatRepository(private val apiClient: APIClient) {
                 path = "/v1/eva/chat",
                 body = EvaChatRequestDto(message = message, history = history),
                 requiresAuth = true,
+                readTimeoutSeconds = 60,
             )
             val reply = response.reply.trim()
             if (reply.isEmpty()) {

@@ -105,7 +105,7 @@ class EvaChatViewModel @Inject constructor(
             val history = _state.value.messages
                 .filter { !it.isLocal && it.role != "system" }
                 .dropLast(1)
-                .takeLast(30)
+                .takeLast(20)
                 .map { EvaChatTurnDto(role = it.role, content = it.text) }
 
             when (val result = repository.chat(trimmed, history)) {
