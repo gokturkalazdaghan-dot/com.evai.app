@@ -18,6 +18,7 @@ import {
 import { DevicesModule } from './devices/devices.module';
 import { HealthController } from './health/health.controller';
 import { PrivacyModule } from './privacy/privacy.module';
+import { EvaModule } from './eva/eva.module';
 import { CacheModule } from './cache/cache.module';
 import { IpAllowlistMiddleware } from './common/middleware/ip-allowlist.middleware';
 import {
@@ -92,6 +93,7 @@ import { DevicePublicKeyEntity } from './devices/entities/device-public-key.enti
     EntitlementsModule,
     TelemetryModule,
     PrivacyModule,
+    EvaModule,
   ],
   controllers: [HealthController],
   providers: [
