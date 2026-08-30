@@ -84,6 +84,10 @@ services:
       INTERNAL_SERVICE_MASTER_SECRET: ${INTERNAL_SERVICE_MASTER_SECRET:-dev_only_internal_secret_min_32_characters_xx}
       ADMIN_IP_ALLOWLIST: ""
       CORS_ALLOWED_ORIGINS: "*"
+      # Eva sohbeti (POST /v1/eva/chat). Bos birakilirsa uc 503 doner.
+      XAI_API_KEY: ${XAI_API_KEY:-}
+      XAI_MODEL: ${XAI_MODEL:-grok-4.6}
+      XAI_BASE_URL: ${XAI_BASE_URL:-https://api.x.ai/v1}
     ports:
       - "3000:3000"
     networks:
