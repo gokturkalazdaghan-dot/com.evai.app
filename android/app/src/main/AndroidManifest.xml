@@ -40,11 +40,16 @@
 
     <!-- Batarya uyarilari bildirimle veriliyor (Android 13+ izin ister). -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Hey Eva: on plan sohbet dinleme. Arka planda surekli dinlemez. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <queries>
         <intent>
             <action android:name="android.intent.action.SENDTO" />
             <data android:scheme="mailto" />
+        </intent>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
         </intent>
     </queries>
 

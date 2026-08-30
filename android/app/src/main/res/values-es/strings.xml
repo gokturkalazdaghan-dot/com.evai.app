@@ -182,4 +182,14 @@
     <string name="hud_live">en vivo</string>
     <string name="hud_minutes_ago">%1$d min</string>
     <string name="hud_open">Abrir panel del vehículo</string>
+
+    <string name="tab_eva">Eva</string>
+    <string name="eva_chat_title">Eva</string>
+    <string name="eva_chat_wake_hint">Di “hey Eva” y habla. Conversación, no órdenes.</string>
+    <string name="eva_chat_listening_hint">Estoy aquí. Sigue hablando.</string>
+    <string name="eva_chat_placeholder">Escribe a Eva…</string>
+    <string name="eva_chat_thinking">Eva está pensando…</string>
+    <string name="eva_chat_mic">Hablar con Eva</string>
+    <string name="eva_chat_send">Enviar</string>
+
 </resources>

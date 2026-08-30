@@ -118,6 +118,7 @@ class APIClient(
         path: String,
         body: Req,
         requiresAuth: Boolean,
+        readTimeoutSeconds: Long? = null,
     ): Res = withContext(Dispatchers.IO) {
         val bodyJson = json.encodeToString(body)
 
@@ -134,7 +135,15 @@ class APIClient(
             attachSignatureHeadersIfApplicable(requestBuilder, path, "POST", bodyJson)
         }
 
-        executeRequest(requestBuilder.build())
+        val request = requestBuilder.build()
+        val client = if (readTimeoutSeconds != null) {
+            httpClient.newBuilder()
+                .readTimeout(readTimeoutSeconds, TimeUnit.SECONDS)
+                .build()
+        } else {
+            httpClient
+        }
+        executeRequest(request, client)
     }
 
     suspend inline fun <reified Res> get(
@@ -255,12 +264,15 @@ class APIClient(
         requestBuilder.addHeader("X-Eva-Device-Id", deviceId)
     }
 
-    suspend inline fun <reified Res> executeRequest(request: Request): Res {
+    suspend inline fun <reified Res> executeRequest(
+        request: Request,
+        client: OkHttpClient = httpClient,
+    ): Res {
         val responseBody: String
         val statusCode: Int
 
         try {
-            httpClient.newCall(request).execute().use { response ->
+            client.newCall(request).execute().use { response ->
                 statusCode = response.code
                 responseBody = response.body?.string().orEmpty()
             }
